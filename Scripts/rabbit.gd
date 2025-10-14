@@ -7,6 +7,7 @@ enum PLAYER_STATES {
 	STILL,
 	START_MOVE,
 	START_DASH,
+	QUICK_STOP,
 	RUNNING,
 	STOPING,
 	multiplyVelocity2D,
@@ -40,6 +41,11 @@ enum PLAYER_STATES {
 @export_subgroup("FAST_RUN")
 @export var FAST_RUN_SPEED: float = 2
 @export var FAST_RUN_SLOW_DOWN: float = 2
+#-QUICK_STOP
+@export_subgroup("QUICK_STOP")
+@export var QUICK_STOP_SLOW_DOWN_TIME: float = 2
+@export var QUICK_STOP_SLOW_SPEED: float = 2
+# @export var QUICK_STOP_SLOW_SPEED: float = 2
 
 
 # Internal variables
@@ -47,6 +53,9 @@ enum PLAYER_STATES {
 var curent_player_state = PLAYER_STATES.STILL
 #-START_MOVE
 var start_move = START_MOVE_TIME
+#-QUICK_STOP
+var slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+var speed_before = 0
 func _physics_process(delta: float) -> void:
 	#Inputs
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
@@ -84,6 +93,7 @@ func _physics_process(delta: float) -> void:
 				if abs(velocity.x) + abs(velocity.z) < 1:
 					velocity.x = 0
 					velocity.z = 0
+					# Switch states
 					start_move = START_MOVE_TIME
 					curent_player_state = PLAYER_STATES.STILL
 			move_and_slide()
@@ -93,7 +103,26 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, FAST_RUN_SPEED)
 				multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
 			else:
-				pass
+				# Switch states
+				curent_player_state = PLAYER_STATES.QUICK_STOP
+
+			move_and_slide()
+		
+		PLAYER_STATES.QUICK_STOP:
+			slow_down_timer -= delta
+			speed_before = max(velocity.length(), speed_before)
+			var vel_mul = Vector2(velocity.x, velocity.z).normalized() * QUICK_STOP_SLOW_SPEED
+			velocity.x = vel_mul.x
+			velocity.z = vel_mul.y
+			if slow_down_timer <= 0:
+				if direction:
+					add_velocity(delta, direction, speed_before)
+				else:
+					# Switch states
+					velocity = Vector3.ZERO
+					speed_before = 0
+					slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+					curent_player_state = PLAYER_STATES.STILL
 			move_and_slide()
 		_:
 			pass
