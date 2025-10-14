@@ -22,11 +22,11 @@ enum PLAYER_STATES {
 
 #SETUP
 #-STILL
-const STILL_SPEED = 10
+const STILL_SPEED = 20
 #-START_MOVE
 const START_MOVE_TIME = 1
-const START_MOVE_SPEED = 1
-const START_MOVE_SLOW_DOWN = 1
+const START_MOVE_SPEED = 2
+const START_MOVE_SLOW_DOWN = 10
 
 
 # Internal variables
@@ -43,6 +43,7 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.START_MOVE
 				velocity.x = direction.x * STILL_SPEED * delta * 10
 				velocity.z = direction.z * STILL_SPEED * delta * 10
+			move_and_slide()
 		
 		PLAYER_STATES.START_MOVE:
 			if (start_move == -1):
@@ -57,10 +58,13 @@ func _physics_process(delta: float) -> void:
 					velocity.x = 0
 					velocity.z = 0
 					curent_player_state = PLAYER_STATES.STILL
-				velocity.x = move_toward(velocity.x, 0, START_MOVE_SLOW_DOWN * delta)
-				velocity.z = move_toward(velocity.z, 0, START_MOVE_SLOW_DOWN * delta)
+			Vector2(velocity.x, velocity.z)
+			velocity.x = move_toward(velocity.x, 0, START_MOVE_SLOW_DOWN * delta * max(start_move / START_MOVE_TIME + 1, 1))
+			velocity.z = move_toward(velocity.z, 0, START_MOVE_SLOW_DOWN * delta * max(start_move / START_MOVE_TIME + 1, 1))
+			move_and_slide()
 		_:
 			pass
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -70,5 +74,3 @@ func _physics_process(delta: float) -> void:
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-
-	move_and_slide()

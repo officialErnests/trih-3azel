@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=11 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
+[ext_resource type="Texture2D" uid="uid://calj35bafewpi" path="res://icon.svg" id="2_qxrlw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -12,14 +13,43 @@ ground_horizon_color = Color(1.2933929, 1.3286871, 1.4816282, 1)
 sky_material = SubResource("ProceduralSkyMaterial_ebmjs")
 
 [sub_resource type="Environment" id="Environment_wrm1d"]
-background_mode = 2
+background_energy_multiplier = 0.0
 sky = SubResource("Sky_qxrlw")
-tonemap_mode = 2
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.04
+tonemap_mode = 3
+tonemap_exposure = 16.0
+tonemap_white = 16.0
 glow_enabled = true
+glow_intensity = 2.13
+glow_bloom = 0.17
+glow_hdr_threshold = 1.33
+glow_hdr_scale = 0.0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(1, 0.39690673, 0.3361067, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_curve = 3.1383371
+fog_depth_end = 20.0
+adjustment_enabled = true
+adjustment_saturation = 8.0
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_2poj3"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_ebmjs"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wrm1d"]
+albedo_texture = ExtResource("2_qxrlw")
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3dryh"]
+size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxrlw"]
+albedo_texture = ExtResource("2_qxrlw")
+uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wrm1d"]
 
 [node name="Game" type="Node3D"]
 
@@ -28,7 +58,8 @@ environment = SubResource("Environment_wrm1d")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
+light_energy = 0.092
+light_indirect_energy = 0.0
 
 [node name="Beta_Floor" type="StaticBody3D" parent="."]
 
@@ -36,7 +67,13 @@ shadow_enabled = true
 shape = SubResource("WorldBoundaryShape3D_2poj3")
 
 [node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4140787, 0, -0.7954922)
-mesh = SubResource("BoxMesh_ebmjs")
+material_override = SubResource("StandardMaterial3D_wrm1d")
+mesh = SubResource("PlaneMesh_3dryh")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.5, -0.5)
+material_override = SubResource("StandardMaterial3D_qxrlw")
+mesh = SubResource("BoxMesh_wrm1d")
