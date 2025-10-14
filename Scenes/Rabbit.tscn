@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca3vfexx3chtr"]
+
+[ext_resource type="Script" uid="uid://rvui52ia7vmg" path="res://Scripts/rabbit.gd" id="1_i4mnj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rtlo7"]
+radius = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_rtlo7"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="Rabbit" type="CharacterBody3D"]
+script = ExtResource("1_i4mnj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_rtlo7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_rtlo7")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)

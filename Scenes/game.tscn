@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
+
+[ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
+sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
+sky_horizon_color = Color(1.2933929, 1.3286871, 1.4816282, 1)
+ground_bottom_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
+ground_horizon_color = Color(1.2933929, 1.3286871, 1.4816282, 1)
+
+[sub_resource type="Sky" id="Sky_qxrlw"]
+sky_material = SubResource("ProceduralSkyMaterial_ebmjs")
+
+[sub_resource type="Environment" id="Environment_wrm1d"]
+background_mode = 2
+sky = SubResource("Sky_qxrlw")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_2poj3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ebmjs"]
+
+[node name="Game" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wrm1d")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Beta_Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Beta_Floor"]
+shape = SubResource("WorldBoundaryShape3D_2poj3")
+
+[node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4140787, 0, -0.7954922)
+mesh = SubResource("BoxMesh_ebmjs")
