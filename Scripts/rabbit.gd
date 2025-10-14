@@ -20,29 +20,38 @@ enum PLAYER_STATES {
 	WALL_RUN_L
 }
 
+@export_category("Others")
+@export var movement_direction_node: Node3D = Node3D.new()
+
+@export_category("Movement")
 #SETUP
 #-STILL
-const STILL_SPEED = 20
+@export_subgroup("Still")
+@export var STILL_SPEED: float = 20
 #-START_MOVE
-const START_MOVE_TIME = 1
-const START_MOVE_SPEED = 2
-const START_MOVE_SLOW_DOWN = 10
+@export_subgroup("START_MOVE")
+@export var START_MOVE_TIME = 0.5
+@export var START_MOVE_SPEED = 2
+@export var START_MOVE_SLOW_DOWN = 20
 
 
 # Internal variables
 var start_move = -1
 var curent_player_state = PLAYER_STATES.STILL
 func _physics_process(delta: float) -> void:
-	#Gets input
+	#Inputs
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction := (transform.basis * Vector3(
+						input_dir.x * sin(movement_direction_node.rotation.y + PI / 2) + input_dir.y * sin(movement_direction_node.rotation.y),
+						0,
+						input_dir.x * cos(movement_direction_node.rotation.y + PI / 2) + input_dir.y * cos(movement_direction_node.rotation.y))).normalized()
 	
+	#Processes player states
 	match curent_player_state:
 		PLAYER_STATES.STILL:
 			if direction:
 				curent_player_state = PLAYER_STATES.START_MOVE
-				velocity.x = direction.x * STILL_SPEED * delta * 10
-				velocity.z = direction.z * STILL_SPEED * delta * 10
+				add_velocity(delta, direction, STILL_SPEED)
 			move_and_slide()
 		
 		PLAYER_STATES.START_MOVE:
@@ -51,8 +60,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				start_move -= delta
 			if direction:
-				velocity.x += direction.x * START_MOVE_SPEED * delta * 10
-				velocity.z += direction.z * START_MOVE_SPEED * delta * 10
+				add_velocity(delta, direction, START_MOVE_SPEED)
 			else:
 				if abs(velocity.x + velocity.z) < 1:
 					velocity.x = 0
@@ -74,3 +82,7 @@ func _physics_process(delta: float) -> void:
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
+
+func add_velocity(delta, direction, in_velocity):
+	velocity.x += direction.x * in_velocity * delta * 10
+	velocity.z += direction.z * in_velocity * delta * 10

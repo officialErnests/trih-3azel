@@ -9,8 +9,9 @@ radius = 0.25
 [sub_resource type="BoxMesh" id="BoxMesh_rtlo7"]
 size = Vector3(0.25, 0.25, 0.25)
 
-[node name="Rabbit" type="CharacterBody3D"]
+[node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node")]
 script = ExtResource("1_i4mnj")
+movement_direction_node = NodePath("Camera3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_rtlo7")
@@ -21,3 +22,4 @@ mesh = SubResource("BoxMesh_rtlo7")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
 script = ExtResource("2_78qo1")
+stalk_distance = 2

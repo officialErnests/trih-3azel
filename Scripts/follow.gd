@@ -1,11 +1,15 @@
 extends Camera3D
 
 @export var stalk_distance = 10
+var track_object: Node3D
 
-var previous_position = global_position
-var glob_position = global_position
+@onready var nb_global_position = global_position
+func _ready() -> void:
+	track_object = get_parent()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	glob_position += (glob_position - previous_position) * delta * 0.1
-	previous_position = global_position
-	glob_position = glob_position
+	look_at(track_object.global_position)
+	var track_position = track_object.global_position + Vector3.UP
+	nb_global_position += (track_position - nb_global_position) * delta * clamp(nb_global_position.distance_to(track_position) - stalk_distance, -1, 1) * 2
+	nb_global_position.y += (track_position.y - nb_global_position.y) * delta
+	global_position = nb_global_position
