@@ -12,6 +12,11 @@ size = Vector3(0.25, 0.25, 0.25)
 [node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node")]
 script = ExtResource("1_i4mnj")
 movement_direction_node = NodePath("Camera3D")
+STILL_SPEED = 20.0
+START_MOVE_SPEED = 0.8
+START_MOVE_FAST_SLOW_DOWN = 4.0
+START_MOVE_SPEED_BOOST = 20.0
+FAST_RUN_SPEED = 4.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_rtlo7")
