@@ -30,9 +30,10 @@ enum PLAYER_STATES {
 @export var STILL_SPEED: float = 20
 #-START_MOVE
 @export_subgroup("START_MOVE")
-@export var START_MOVE_TIME = 0.5
-@export var START_MOVE_SPEED = 2
-@export var START_MOVE_SLOW_DOWN = 20
+@export var START_MOVE_TIME = 2
+@export var START_MOVE_SPEED = 1
+@export var START_MOVE_SLOW_DOWN = 1
+@export var START_MOVE_FAST_SLOW_DOWN = 2
 
 
 # Internal variables
@@ -60,15 +61,15 @@ func _physics_process(delta: float) -> void:
 			else:
 				start_move -= delta
 			if direction:
+				slowDown(1 - (delta * max(start_move / START_MOVE_TIME + 1, 1) * START_MOVE_SLOW_DOWN))
 				add_velocity(delta, direction, START_MOVE_SPEED)
 			else:
-				if abs(velocity.x + velocity.z) < 1:
+				slowDown(1 - (delta * max(start_move / START_MOVE_TIME + 1, 1) * START_MOVE_FAST_SLOW_DOWN))
+				if abs(velocity.x) + abs(velocity.z) < 1:
 					velocity.x = 0
 					velocity.z = 0
 					curent_player_state = PLAYER_STATES.STILL
-			Vector2(velocity.x, velocity.z)
-			velocity.x = move_toward(velocity.x, 0, START_MOVE_SLOW_DOWN * delta * max(start_move / START_MOVE_TIME + 1, 1))
-			velocity.z = move_toward(velocity.z, 0, START_MOVE_SLOW_DOWN * delta * max(start_move / START_MOVE_TIME + 1, 1))
+			
 			move_and_slide()
 		_:
 			pass
@@ -80,8 +81,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+func slowDown(slowness):
+	Vector2(velocity.x, velocity.z)
+	var vel_mul = Vector2(velocity.x, velocity.z) * slowness
+	velocity.x = vel_mul.x
+	velocity.z = vel_mul.y
 
 func add_velocity(delta, direction, in_velocity):
 	velocity.x += direction.x * in_velocity * delta * 10
