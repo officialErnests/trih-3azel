@@ -9,13 +9,11 @@ enum PLAYER_STATES {
 	START_DASH,
 	QUICK_STOP,
 	RUNNING,
-	STOPING,
-	multiplyVelocity2D,
+	JUMP_START,
+	FALL,
 	HIT_TROUGH,
 	FAST_RUN,
 	GRINDING,
-	JUMP_START,
-	FALL,
 	TRICK,
 	WALL_RUN_R,
 	WALL_RUN_L
@@ -41,21 +39,39 @@ enum PLAYER_STATES {
 @export_subgroup("FAST_RUN")
 @export var FAST_RUN_SPEED: float = 2
 @export var FAST_RUN_SLOW_DOWN: float = 2
+@export var FAST_RUN_STOP_TRESHOLD: float = 2
 #-QUICK_STOP
 @export_subgroup("QUICK_STOP")
-@export var QUICK_STOP_SLOW_DOWN_TIME: float = 2
+@export var QUICK_STOP_SLOW_DOWN_TIME: float = 1
 @export var QUICK_STOP_SLOW_SPEED: float = 2
-# @export var QUICK_STOP_SLOW_SPEED: float = 2
-
+@export var QUICK_STOP_RELESE_MUL: float = 2
+#-RUNNING
+@export_subgroup("RUNNING")
+@export var RUNNING_SPEED: float = 1
+@export var RUNNING_SLOW_DOWN: float = 1
+@export var RUNNING_TRESHOLD: float = 1
+#-JUMP_START
+@export_subgroup("JUMP_START")
+@export var JUMP_START_FORCE: float = 1
+@export var JUMP_START_SPEED: float = 1
+@export var JUMP_START_GRAVITY: float = 1
+#-FALL
+@export_subgroup("FALL")
+@export var FALL_GRAVITY: float = 1
 
 # Internal variables
 #OTHERS
 var curent_player_state = PLAYER_STATES.STILL
 #-START_MOVE
-var start_move = START_MOVE_TIME
+var start_move = 0
 #-QUICK_STOP
-var slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+var slow_down_timer = 0
 var speed_before = 0
+
+func _ready() -> void:
+	slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+	start_move = START_MOVE_TIME
+	
 func _physics_process(delta: float) -> void:
 	#Inputs
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
@@ -64,9 +80,14 @@ func _physics_process(delta: float) -> void:
 						0,
 						input_dir.x * cos(movement_direction_node.rotation.y + PI / 2) + input_dir.y * cos(movement_direction_node.rotation.y))).normalized()
 	
+	print(PLAYER_STATES.find_key(curent_player_state))
 	#Processes player states
 	match curent_player_state:
 		PLAYER_STATES.STILL:
+			if Input.is_action_just_pressed("Jump"):
+				# Switch states
+				curent_player_state = PLAYER_STATES.JUMP_START
+
 			if direction:
 				add_velocity(delta, direction, STILL_SPEED)
 				# Switch states
@@ -78,19 +99,23 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.FALL
 
 			if Input.is_action_just_pressed("Jump"):
-				add_velocity(delta, direction, START_MOVE_SPEED_BOOST)
+				var prev_velocity = velocity.length()
+				velocity.x = 0
+				velocity.z = 0
+				add_velocity(delta, direction, START_MOVE_SPEED_BOOST * prev_velocity / 2)
 				# Switch states
 				start_move = START_MOVE_TIME
 				curent_player_state = PLAYER_STATES.FAST_RUN
 			
 
 			start_move -= delta
+			
 			if direction:
 				add_velocity(delta, direction, START_MOVE_SPEED)
 				multiplyVelocity2D(1 - (delta * (1.0 - (max(start_move, 0) / START_MOVE_TIME * 1.1)) * START_MOVE_SLOW_DOWN))
 			else:
 				multiplyVelocity2D(1 - (delta * max(start_move / START_MOVE_TIME + 1, 1) * START_MOVE_FAST_SLOW_DOWN))
-				if abs(velocity.x) + abs(velocity.z) < 1:
+				if abs(velocity.length()) < 1:
 					velocity.x = 0
 					velocity.z = 0
 					# Switch states
@@ -101,8 +126,8 @@ func _physics_process(delta: float) -> void:
 		PLAYER_STATES.FAST_RUN:
 			if direction:
 				add_velocity(delta, direction, FAST_RUN_SPEED)
-				multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
-			else:
+			multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
+			if (velocity.length() < FAST_RUN_STOP_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.QUICK_STOP
 
@@ -114,16 +139,50 @@ func _physics_process(delta: float) -> void:
 			var vel_mul = Vector2(velocity.x, velocity.z).normalized() * QUICK_STOP_SLOW_SPEED
 			velocity.x = vel_mul.x
 			velocity.z = vel_mul.y
+			if Input.is_action_just_pressed("Jump"):
+				var prev_velocity = velocity.length()
+				velocity.x = 0
+				velocity.z = 0
+				add_velocity(delta, direction, prev_velocity * speed_before * QUICK_STOP_RELESE_MUL)
+				# Switch states
+				speed_before = 0
+				slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+				curent_player_state = PLAYER_STATES.RUNNING
 			if slow_down_timer <= 0:
-				if direction:
-					add_velocity(delta, direction, speed_before)
-				else:
-					# Switch states
-					velocity = Vector3.ZERO
-					speed_before = 0
-					slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
-					curent_player_state = PLAYER_STATES.STILL
+				# Switch states
+				velocity = Vector3.ZERO
+				speed_before = 0
+				slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
+				curent_player_state = PLAYER_STATES.STILL
 			move_and_slide()
+
+		PLAYER_STATES.RUNNING:
+			if direction:
+				add_velocity(delta, direction, RUNNING_SPEED)
+				multiplyVelocity2D(1 - (delta * RUNNING_SLOW_DOWN))
+			if (velocity.length() < RUNNING_TRESHOLD):
+				# Switch states
+				curent_player_state = PLAYER_STATES.START_MOVE
+			move_and_slide()
+
+		PLAYER_STATES.JUMP_START:
+			if velocity.y <= 0:
+				velocity.y = JUMP_START_FORCE
+			if direction:
+				add_velocity(delta, direction, JUMP_START_SPEED)
+			velocity.y -= JUMP_START_GRAVITY * delta
+			#Detects if player starts falling
+			if velocity.y <= 0:
+				# Switch states
+				curent_player_state = PLAYER_STATES.FALL
+			move_and_slide()
+		
+		PLAYER_STATES.FALL:
+			velocity.y = - FALL_GRAVITY
+			if is_on_floor():
+				curent_player_state = PLAYER_STATES.START_MOVE
+			move_and_slide()
+
 		_:
 			pass
 
