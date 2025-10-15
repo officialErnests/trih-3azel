@@ -10,6 +10,9 @@ radius = 0.25
 size = Vector3(0.25, 0.25, 0.25)
 
 [node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node")]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
 script = ExtResource("1_i4mnj")
 movement_direction_node = NodePath("Camera3D")
 STILL_SPEED = 20.0

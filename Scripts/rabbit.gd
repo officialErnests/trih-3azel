@@ -56,10 +56,18 @@ enum PLAYER_STATES {
 @export var JUMP_START_FORCE: float = 1
 @export var JUMP_START_SPEED: float = 1
 @export var JUMP_START_GRAVITY: float = 1
+@export var JUMP_START_SLOW_DOWN: float = 1
 #-FALL
 @export_subgroup("FALL")
 @export var FALL_SPEED: float = 1
 @export var FALL_GRAVITY: float = 1
+#-TRICK
+@export_subgroup("TRICK")
+@export var TRICK_TIME: float = 1
+@export var TRICK_FORCE: float = 1
+@export var TRICK_SPEED: float = 1
+@export var TRICK_GRAVITY: float = 1
+@export var TRICK_SLOW_DOWN: float = 1
 
 # Internal variables
 #OTHERS
@@ -70,6 +78,8 @@ var start_move = 0
 #-QUICK_STOP
 var slow_down_timer = 0
 var speed_before = 0
+#-TRICK
+var trick_time = 0
 
 func _ready() -> void:
 	slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
@@ -85,7 +95,7 @@ func _physics_process(delta: float) -> void:
 	
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
-	print(PLAYER_STATES.find_key(curent_player_state))
+	# print(PLAYER_STATES.find_key(curent_player_state))
 	#Processes player states
 	match curent_player_state:
 		PLAYER_STATES.STILL:
@@ -97,6 +107,9 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, STILL_SPEED)
 				# Switch states
 				curent_player_state = PLAYER_STATES.START_MOVE
+
+			if !is_on_floor():
+				curent_player_state = PLAYER_STATES.FALL
 			move_and_slide()
 		
 		PLAYER_STATES.START_MOVE:
@@ -130,6 +143,10 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.FAST_RUN:
+			if Input.is_action_just_pressed("Jump"):
+					curent_player_state = PLAYER_STATES.TRICK
+			if !is_on_floor():
+				curent_player_state = PLAYER_STATES.FALL
 			if direction:
 				add_velocity(delta, direction, FAST_RUN_SPEED)
 			multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
@@ -140,8 +157,12 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		
 		PLAYER_STATES.QUICK_STOP:
+			if !is_on_floor():
+				curent_player_state = PLAYER_STATES.FALL
+			if switch_state:
+				speed_before = velocity.length()
+				slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
 			slow_down_timer -= delta
-			speed_before = max(velocity.length(), speed_before)
 			var vel_mul = Vector2(velocity.x, velocity.z).normalized() * QUICK_STOP_SLOW_SPEED
 			velocity.x = vel_mul.x
 			velocity.z = vel_mul.y
@@ -151,18 +172,18 @@ func _physics_process(delta: float) -> void:
 				velocity.z = 0
 				add_velocity(delta, direction, prev_velocity * speed_before * QUICK_STOP_RELESE_MUL)
 				# Switch states
-				speed_before = 0
-				slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
 				curent_player_state = PLAYER_STATES.RUNNING
 			if slow_down_timer <= 0:
 				# Switch states
 				velocity = Vector3.ZERO
-				speed_before = 0
-				slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
 				curent_player_state = PLAYER_STATES.STILL
 			move_and_slide()
 
 		PLAYER_STATES.RUNNING:
+			if Input.is_action_just_pressed("Jump"):
+					curent_player_state = PLAYER_STATES.TRICK
+			if !is_on_floor():
+				curent_player_state = PLAYER_STATES.FALL
 			if direction:
 				add_velocity(delta, direction, RUNNING_SPEED)
 				multiplyVelocity2D(1 - (delta * RUNNING_SLOW_DOWN))
@@ -172,12 +193,13 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.JUMP_START:
-			if velocity.y <= 0:
+			if switch_state:
 				velocity.y = JUMP_START_FORCE
 			if direction:
 				add_velocity(delta, direction, JUMP_START_SPEED)
+				multiplyVelocity2D(1 - (delta * JUMP_START_SLOW_DOWN))
 			velocity.y -= JUMP_START_GRAVITY * delta
-			#Detects if player starts falling
+
 			if velocity.y <= 0:
 				# Switch states
 				curent_player_state = PLAYER_STATES.FALL
@@ -191,8 +213,29 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.START_MOVE
 			move_and_slide()
 
+		PLAYER_STATES.TRICK:
+			if switch_state:
+				trick_time = TRICK_TIME
+				velocity.y = TRICK_FORCE
+			if direction:
+				add_velocity(delta, direction, TRICK_SPEED)
+				multiplyVelocity2D(1 - (delta * TRICK_SLOW_DOWN))
+
+			if velocity.y <= 0:
+				if trick_time > 0:
+					trick_time -= delta
+					if Input.is_action_just_pressed("Jump"):
+						# Switch states
+						curent_player_state = PLAYER_STATES.JUMP_START
+				else:
+					# Switch states
+					curent_player_state = PLAYER_STATES.FALL
+			else:
+				velocity.y -= JUMP_START_GRAVITY * delta
+
+			move_and_slide()
 		_:
-			pass
+			curent_player_state = PLAYER_STATES.START_MOVE
 
 
 func multiplyVelocity2D(slowness):

@@ -71,10 +71,16 @@ shape = SubResource("WorldBoundaryShape3D_2poj3")
 
 [node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+QUICK_STOP_RELESE_MUL = 2.0
+RUNNING_SPEED = 0.1
+RUNNING_SLOW_DOWN = 0.5
 JUMP_START_FORCE = 4.0
 JUMP_START_GRAVITY = 4.0
-FALL_SPEED = 1.0
-FALL_GRAVITY = 10.0
+FALL_SPEED = 0.5
+FALL_GRAVITY = 40.0
+TRICK_TIME = 0.2
+TRICK_FORCE = 4.0
+TRICK_GRAVITY = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_wrm1d")
