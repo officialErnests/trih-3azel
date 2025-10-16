@@ -35,6 +35,10 @@ folder_colors={
 "res://Scripts/": "orange"
 }
 
+[global_group]
+
+Player=""
+
 [input]
 
 Foward={
@@ -68,3 +72,5 @@ Jump={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/decals/filter=0
+textures/light_projectors/filter=0

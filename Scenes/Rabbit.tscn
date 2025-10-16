@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ca3vfexx3chtr"]
+[gd_scene load_steps=6 format=3 uid="uid://ca3vfexx3chtr"]
 
 [ext_resource type="Script" uid="uid://rvui52ia7vmg" path="res://Scripts/rabbit.gd" id="1_i4mnj"]
 [ext_resource type="Script" uid="uid://dpwqhsut0wvj8" path="res://Scripts/follow.gd" id="2_78qo1"]
@@ -6,11 +6,16 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_rtlo7"]
 radius = 0.25
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_78qo1"]
+distance_fade_mode = 2
+distance_fade_max_distance = 1.0
+
 [sub_resource type="SphereMesh" id="SphereMesh_78qo1"]
+material = SubResource("StandardMaterial3D_78qo1")
 radius = 0.25
 height = 0.5
 
-[node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node")]
+[node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node") groups=["Player"]]
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
