@@ -41,7 +41,6 @@ mesh = SubResource("SphereMesh_78qo1")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
-fov = 37.849285
 script = ExtResource("2_78qo1")
 stalk_distance = 2
 

@@ -1,19 +1,11 @@
-@tool
-extends MeshInstance2D
+extends MeshInstance3D
 
-@export var floor_size: int:
-	set(new_floor_size):
-		floor_size = max(new_floor_size, 0)
-		if Engine.is_editor_hint():
-			gen_floor()
+@export var floor_size: int
 
 func _ready() -> void:
 	gen_floor()
 
 func gen_floor():
-	var rings = 50
-	var radial_segments = 50
-	var radius = 1
 	var surface_array = []
 	surface_array.resize(Mesh.ARRAY_MAX)
 
@@ -27,20 +19,13 @@ func gen_floor():
 	var prevrow = 0
 	var point = 0
 
-	for i in range(rings + 1):
-		var v = float(i) / rings
-		var w = sin(PI * v)
-		var y = cos(PI * v)
-
-		# Loop over segments in ring.
-		for j in range(radial_segments + 1):
-			var u = float(j) / radial_segments
-			var x = sin(u * PI * 2.0)
-			var z = cos(u * PI * 2.0)
-			var vert = Vector3(x * radius * w, y * radius, z * radius * w)
+	# Loop over rings.
+	for i in range(floor_size + 1):
+		for j in range(floor_size + 1):
+			var vert = Vector3(i, 0, j)
 			verts.append(vert)
 			normals.append(vert.normalized())
-			uvs.append(Vector2(u, v))
+			uvs.append(Vector2(1, 1))
 			point += 1
 
 			# Create triangles in ring using indices.
@@ -55,7 +40,8 @@ func gen_floor():
 
 		prevrow = thisrow
 		thisrow = point
-
+	
+	mesh.create_trimesh_collision()
 	# Assign arrays to surface array.
 	surface_array[Mesh.ARRAY_VERTEX] = verts
 	surface_array[Mesh.ARRAY_TEX_UV] = uvs

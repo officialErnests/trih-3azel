@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://c5himnpiqx3lp" path="res://Scenes/gen_cube.tscn" id="3_wrm1d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -60,5 +61,8 @@ TRICK_FORCE = 4.0
 TRICK_GRAVITY = 2.0
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
+
+[node name="Cube" parent="." instance=ExtResource("3_wrm1d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [editable path="Rabbit"]

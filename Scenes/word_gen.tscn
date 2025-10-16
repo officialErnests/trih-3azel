@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://b810pw1blmn73"]
+[gd_scene load_steps=3 format=3 uid="uid://b810pw1blmn73"]
 
 [ext_resource type="Script" uid="uid://d3fcoxrwpa82p" path="res://Scripts/floor_generation.gd" id="1_8q0hw"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8q0hw"]
 
 [node name="WORD_GEN" type="Node3D"]
 
 [node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_8q0hw")
 script = ExtResource("1_8q0hw")

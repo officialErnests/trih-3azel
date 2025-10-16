@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://ba61hndaq7evr"]
+[gd_scene load_steps=4 format=3 uid="uid://ba61hndaq7evr"]
 
-[ext_resource type="Script" uid="uid://d3fcoxrwpa82p" path="res://Scripts/floor_generation.gd" id="1_nvnu3"]
+[ext_resource type="Texture2D" uid="uid://e3wjlbgepue2" path="res://Assets/Tile_1/BG.png" id="1_nvnu3"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_nvnu3"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agfsv"]
+albedo_texture = ExtResource("1_nvnu3")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ik5og"]
 
 [node name="FLOOR" type="Node3D"]
-script = ExtResource("1_nvnu3")
-floor_size = null
 
 [node name="FloorMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("ArrayMesh_nvnu3")
+material_override = SubResource("StandardMaterial3D_agfsv")
+mesh = SubResource("ArrayMesh_ik5og")
