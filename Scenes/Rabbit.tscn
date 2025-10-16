@@ -6,8 +6,9 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_rtlo7"]
 radius = 0.25
 
-[sub_resource type="BoxMesh" id="BoxMesh_rtlo7"]
-size = Vector3(0.25, 0.25, 0.25)
+[sub_resource type="SphereMesh" id="SphereMesh_78qo1"]
+radius = 0.25
+height = 0.5
 
 [node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node")]
 axis_lock_angular_x = true
@@ -36,9 +37,12 @@ FALL_GRAVITY = 2.0
 shape = SubResource("SphereShape3D_rtlo7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_rtlo7")
+mesh = SubResource("SphereMesh_78qo1")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+fov = 37.849285
 script = ExtResource("2_78qo1")
 stalk_distance = 2
+
+[node name="RayCast3D" type="RayCast3D" parent="."]

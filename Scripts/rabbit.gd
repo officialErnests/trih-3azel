@@ -73,6 +73,7 @@ enum PLAYER_STATES {
 #OTHERS
 var curent_player_state = PLAYER_STATES.STILL
 var prev_player_state = curent_player_state
+@onready var ground_raycast = $RayCast3D
 #-START_MOVE
 var start_move = 0
 #-QUICK_STOP
@@ -95,7 +96,7 @@ func _physics_process(delta: float) -> void:
 	
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
-	# print(PLAYER_STATES.find_key(curent_player_state))
+	print(PLAYER_STATES.find_key(curent_player_state))
 	#Processes player states
 	match curent_player_state:
 		PLAYER_STATES.STILL:
@@ -107,17 +108,12 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, STILL_SPEED)
 				# Switch states
 				curent_player_state = PLAYER_STATES.START_MOVE
-
-			if !is_on_floor():
-				curent_player_state = PLAYER_STATES.FALL
+			snapToGround()
 			move_and_slide()
 		
 		PLAYER_STATES.START_MOVE:
 			if switch_state:
 				start_move = START_MOVE_TIME
-
-			if !is_on_floor():
-				curent_player_state = PLAYER_STATES.FALL
 
 			start_move -= delta
 			
@@ -140,20 +136,24 @@ func _physics_process(delta: float) -> void:
 					velocity.z = 0
 					# Switch states
 					curent_player_state = PLAYER_STATES.STILL
+
+			snapToGround()
 			move_and_slide()
 
 		PLAYER_STATES.FAST_RUN:
-			if Input.is_action_just_pressed("Jump"):
-					curent_player_state = PLAYER_STATES.TRICK
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
 				add_velocity(delta, direction, FAST_RUN_SPEED)
+			else:
+				if Input.is_action_just_pressed("Jump"):
+						curent_player_state = PLAYER_STATES.TRICK
 			multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
 			if (velocity.length() < FAST_RUN_STOP_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.QUICK_STOP
 
+			snapToGround()
 			move_and_slide()
 		
 		PLAYER_STATES.QUICK_STOP:
@@ -177,19 +177,22 @@ func _physics_process(delta: float) -> void:
 				# Switch states
 				velocity = Vector3.ZERO
 				curent_player_state = PLAYER_STATES.STILL
+			snapToGround()
 			move_and_slide()
 
 		PLAYER_STATES.RUNNING:
-			if Input.is_action_just_pressed("Jump"):
-					curent_player_state = PLAYER_STATES.TRICK
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
 				add_velocity(delta, direction, RUNNING_SPEED)
 				multiplyVelocity2D(1 - (delta * RUNNING_SLOW_DOWN))
+			else:
+				if Input.is_action_just_pressed("Jump"):
+						curent_player_state = PLAYER_STATES.TRICK
 			if (velocity.length() < RUNNING_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.START_MOVE
+			snapToGround()
 			move_and_slide()
 
 		PLAYER_STATES.JUMP_START:
@@ -247,3 +250,10 @@ func multiplyVelocity2D(slowness):
 func add_velocity(delta, direction, in_velocity):
 	velocity.x += direction.x * in_velocity * delta * 10
 	velocity.z += direction.z * in_velocity * delta * 10
+
+func snapToGround():
+	if !is_on_floor():
+		if ground_raycast.is_colliding():
+			velocity.y += (ground_raycast.get_collision_point().y - global_position.y) * 2
+		else:
+			curent_player_state = PLAYER_STATES.FALL
