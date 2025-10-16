@@ -35,7 +35,8 @@ enum PLAYER_STATES {
 @export var START_MOVE_SPEED: float = 1
 @export var START_MOVE_SLOW_DOWN: float = 1
 @export var START_MOVE_FAST_SLOW_DOWN: float = 1
-@export var START_MOVE_SPEED_BOOST: float = 1
+@export var START_MOVE_SPEED_BOOST_MUL: float = 1
+@export var START_MOVE_SPEED_BOOST_ADD: float = 1
 #-FAST_RUN
 @export_subgroup("FAST_RUN")
 @export var FAST_RUN_SPEED: float = 2
@@ -82,6 +83,9 @@ var speed_before = 0
 #-TRICK
 var trick_time = 0
 
+func _init() -> void:
+	Global.player = self
+
 func _ready() -> void:
 	slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
 	start_move = START_MOVE_TIME
@@ -124,7 +128,7 @@ func _physics_process(delta: float) -> void:
 					var prev_velocity = velocity.length()
 					velocity.x = 0
 					velocity.z = 0
-					add_velocity(delta, direction, START_MOVE_SPEED_BOOST * prev_velocity / 2)
+					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
 					# Switch states
 					curent_player_state = PLAYER_STATES.FAST_RUN
 			else:

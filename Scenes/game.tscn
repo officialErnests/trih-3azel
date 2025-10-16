@@ -48,8 +48,12 @@ light_specular = 0.0
 
 [node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+START_MOVE_SPEED_BOOST_MUL = 4.0
+START_MOVE_SPEED_BOOST_ADD = 80.0
+FAST_RUN_SPEED = 8.0
+FAST_RUN_STOP_TRESHOLD = 17.0
 QUICK_STOP_RELESE_MUL = 1.5
-RUNNING_SPEED = 0.1
+RUNNING_SPEED = 4.0
 RUNNING_SLOW_DOWN = 0.5
 JUMP_START_FORCE = 4.0
 JUMP_START_GRAVITY = 4.0
