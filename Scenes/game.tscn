@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=6 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
-[ext_resource type="PackedScene" uid="uid://c5himnpiqx3lp" path="res://Scenes/gen_cube.tscn" id="3_wrm1d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -18,22 +17,22 @@ background_energy_multiplier = 0.0
 sky = SubResource("Sky_qxrlw")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 0.04
+ambient_light_energy = 0.05
 tonemap_mode = 3
 tonemap_exposure = 16.0
 tonemap_white = 16.0
 glow_enabled = true
-glow_intensity = 2.13
-glow_bloom = 0.17
-glow_hdr_threshold = 1.33
-glow_hdr_scale = 0.0
+glow_intensity = 1.01
+glow_bloom = 0.31
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(1, 0.39690673, 0.3361067, 1)
-fog_density = 0.0934
+fog_light_color = Color(0, 0.4500003, 1, 1)
+fog_light_energy = 16.0
+fog_density = 1.0
 fog_sky_affect = 0.0
-fog_depth_curve = 1.624506
-fog_depth_end = 50.0
+fog_depth_curve = 1.4640855
+fog_depth_begin = -30.0
+fog_depth_end = 2000.0
 adjustment_enabled = true
 adjustment_saturation = 8.0
 
@@ -44,12 +43,12 @@ environment = SubResource("Environment_wrm1d")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-light_energy = 0.092
-light_indirect_energy = 0.0
+light_energy = 0.08
+light_specular = 0.0
 
 [node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
-QUICK_STOP_RELESE_MUL = 2.0
+QUICK_STOP_RELESE_MUL = 1.5
 RUNNING_SPEED = 0.1
 RUNNING_SLOW_DOWN = 0.5
 JUMP_START_FORCE = 4.0
@@ -61,8 +60,5 @@ TRICK_FORCE = 4.0
 TRICK_GRAVITY = 2.0
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
-
-[node name="Cube" parent="." instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [editable path="Rabbit"]
