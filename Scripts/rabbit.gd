@@ -100,7 +100,7 @@ func _physics_process(delta: float) -> void:
 	
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
-	print(PLAYER_STATES.find_key(curent_player_state))
+	# print(PLAYER_STATES.find_key(curent_player_state))
 	#Processes player states
 	match curent_player_state:
 		PLAYER_STATES.STILL:

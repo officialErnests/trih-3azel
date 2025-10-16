@@ -16,16 +16,20 @@ var show_box = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	if !Engine.is_editor_hint():
+		for x in range(spawn_amount):
+			var instance = spawn_obj.instantiate()
+			instance.position = Vector3(randf_range(spawn_size.x / -2, spawn_size.x / 2),
+										randf_range(spawn_size.y / -2, spawn_size.y / 2),
+										randf_range(spawn_size.z / -2, spawn_size.z / 2))
+			instance.scale = Vector3.ONE * randf_range(spawn_size_min, spawn_size_max)
+			add_child(instance)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func show_bounding_box():
 	var new_box = MeshInstance3D.new()
 	new_box.mesh = BoxMesh.new()
 	new_box.scale = spawn_size
+	new_box.transparency = 0.9
 	add_child(new_box)
 	return new_box
