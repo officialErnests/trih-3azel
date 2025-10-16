@@ -10,7 +10,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	look_at(track_object.global_position + Vector3.UP)
 	var track_position = track_object.global_position + Vector3.UP
-	nb_global_position += (track_position - nb_global_position) * delta * min(max(nb_global_position.distance_to(track_position) - stalk_distance, 0), 1) * 4
+	nb_global_position += (track_position - nb_global_position) * delta * min(max(nb_global_position.distance_to(track_position) - stalk_distance, -1), 1) * 4
 	if track_object.is_on_floor():
 		nb_global_position.y += (track_position.y - nb_global_position.y - 0.5) * delta
 	else:

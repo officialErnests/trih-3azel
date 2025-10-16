@@ -1,11 +1,15 @@
 extends RigidBody3D
 
+signal hit
+var has_been_hit = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	hit.connect(hit_trough)
+	
 
+func hit_trough():
+	has_been_hit = true
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _on_body_entered(body: Node) -> void:
+	if !has_been_hit and body.is_in_group("Player") and body.curent_player_state == body.PLAYER_STATES.FAST_RUN:
+		body.blasstrough = self

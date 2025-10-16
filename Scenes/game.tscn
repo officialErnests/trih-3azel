@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
@@ -36,8 +36,6 @@ fog_depth_end = 1048.1
 adjustment_enabled = true
 adjustment_saturation = 8.0
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qxrlw"]
-
 [node name="Game" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -66,13 +64,9 @@ TRICK_FORCE = 4.0
 TRICK_GRAVITY = 2.0
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
-
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("WorldBoundaryShape3D_qxrlw")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -379.5111, 133.65538, 427.7413)
 
 [node name="BlastTrough" parent="." instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19732594, 0.5, 2.0772123)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19732594, 0.41033912, -8.553368)
 
 [editable path="Rabbit"]

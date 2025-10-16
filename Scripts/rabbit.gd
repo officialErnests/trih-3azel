@@ -7,14 +7,14 @@ enum PLAYER_STATES {
 	STILL,
 	START_MOVE,
 	START_DASH,
+	FAST_RUN,
 	QUICK_STOP,
 	RUNNING,
 	JUMP_START,
 	FALL,
 	TRICK,
-
 	HIT_TROUGH,
-	FAST_RUN,
+
 	GRINDING,
 	WALL_RUN_R,
 	WALL_RUN_L
@@ -69,11 +69,18 @@ enum PLAYER_STATES {
 @export var TRICK_SPEED: float = 1
 @export var TRICK_GRAVITY: float = 1
 @export var TRICK_SLOW_DOWN: float = 1
+#-HIT_TROUGH
+@export_subgroup("HIT_TROUGH")
+@export var HIT_TROUGH_TIME: float = 1
+@export var HIT_TROUGH_PULL: float = 1
+@export var HIT_TROUGH_SPEED_MUL: float = 1
 
 # Internal variables
 #OTHERS
 var curent_player_state = PLAYER_STATES.STILL
 var prev_player_state = curent_player_state
+var blasstrough = null
+@onready var mesh = $MeshInstance3D
 @onready var ground_raycast = $RayCast3D
 #-START_MOVE
 var start_move = 0
@@ -82,7 +89,8 @@ var slow_down_timer = 0
 var speed_before = 0
 #-TRICK
 var trick_time = 0
-
+#-HIT_TROUGH
+var hit_trough_timer = 0
 func _init() -> void:
 	Global.player = self
 
@@ -153,6 +161,10 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("Jump"):
 						curent_player_state = PLAYER_STATES.TRICK
 			multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
+			if blasstrough != null:
+				blasstrough.hit.emit()
+				# Switch states
+				curent_player_state = PLAYER_STATES.HIT_TROUGH
 			if (velocity.length() < FAST_RUN_STOP_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.QUICK_STOP
@@ -241,9 +253,23 @@ func _physics_process(delta: float) -> void:
 				velocity.y -= JUMP_START_GRAVITY * delta
 
 			move_and_slide()
+
+		PLAYER_STATES.HIT_TROUGH:
+			if switch_state:
+				hit_trough_timer = 0
+				velocity *= HIT_TROUGH_SPEED_MUL
+			hit_trough_timer += delta
+			var shake_strenght = 0.5 * (1 - (hit_trough_timer / HIT_TROUGH_TIME))
+			mesh.position = Vector3(randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght))
+			blasstrough.global_position += (global_position - blasstrough.global_position) * delta * HIT_TROUGH_PULL * ((hit_trough_timer / HIT_TROUGH_TIME) ** 2 - 0.1)
+			if hit_trough_timer >= HIT_TROUGH_TIME:
+				# Switch states
+				mesh.position = Vector3.ZERO
+				curent_player_state = PLAYER_STATES.RUNNING
+
 		_:
 			curent_player_state = PLAYER_STATES.START_MOVE
-
+		
 
 func multiplyVelocity2D(slowness):
 	Vector2(velocity.x, velocity.z)

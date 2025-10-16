@@ -8,7 +8,8 @@ radius = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_78qo1"]
 distance_fade_mode = 2
-distance_fade_max_distance = 1.0
+distance_fade_min_distance = 1.0
+distance_fade_max_distance = 3.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_78qo1"]
 material = SubResource("StandardMaterial3D_78qo1")
@@ -36,6 +37,9 @@ JUMP_START_SPEED = 0.5
 JUMP_START_GRAVITY = 2.0
 FALL_SPEED = 0.2
 FALL_GRAVITY = 2.0
+HIT_TROUGH_TIME = 2.0
+HIT_TROUGH_PULL = 20.0
+HIT_TROUGH_SPEED_MUL = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_rtlo7")
@@ -46,6 +50,6 @@ mesh = SubResource("SphereMesh_78qo1")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
 script = ExtResource("2_78qo1")
-stalk_distance = 2
+stalk_distance = 3
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
