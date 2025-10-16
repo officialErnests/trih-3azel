@@ -15,10 +15,26 @@ func gen_floor():
 	var normals = PackedVector3Array()
 	var indices = PackedInt32Array()
 
-	_add_quad(Transform3D(
-		Basis.looking_at(Vector3.UP, Vector3.BACK) * 2,
-		Vector3(1, 0, 0)
-	), verts, uvs, normals, indices)
+	var index := 0
+	for r in range(floor_size):
+		for x in range(r + 1):
+			index += 1
+			verts.append(Vector3(x, r, 0))
+			normals.append(Vector3.DOWN)
+			uvs.append(Vector2(x / float(floor_size) + 1, r / float(floor_size)))
+		for y in range(r):
+			index += 1
+			verts.append(Vector3(r, y, 0))
+			normals.append(Vector3.DOWN)
+			uvs.append(Vector2(r / float(floor_size), y / float(floor_size)))
+	print(verts)
+	indices.append(index)
+	indices.append(index + 2)
+	indices.append(index + 1)
+	
+	indices.append(index)
+	indices.append(index + 2)
+	indices.append(index + 3)
 
 	# Assign arrays to surface array.
 	surface_array[Mesh.ARRAY_VERTEX] = verts
@@ -30,36 +46,5 @@ func gen_floor():
 	# No blendshapes, lods, or compression used.
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array)
 
+#THX TO
 #https://gamedev.net/blogs/entry/2277691-procedural-geometry-in-godot/
-func _add_quad(xform: Transform3D, verts: PackedVector3Array, uvs: PackedVector2Array, normals: PackedVector3Array, triangles: PackedInt32Array) -> void:
-	var index := verts.size()
-	
-	# corners before transforming
-	var vert1 := Vector3(-.5, -.5, 0)
-	var vert2 := Vector3(-.5, .5, 0)
-	var vert3 := Vector3(.5, .5, 0)
-	var vert4 := Vector3(.5, -.5, 0)
-	
-	verts.append(xform * vert1)
-	verts.append(xform * vert2)
-	verts.append(xform * vert3)
-	verts.append(xform * vert4)
-	
-	uvs.append(Vector2(1, 0))
-	uvs.append(Vector2(1, 1))
-	uvs.append(Vector2(0, 1))
-	uvs.append(Vector2(0, 0))
-	
-	var normal := xform * Vector3.FORWARD;
-	normals.append(normal)
-	normals.append(normal)
-	normals.append(normal)
-	normals.append(normal)
-	
-	triangles.append(index + 2)
-	triangles.append(index + 1)
-	triangles.append(index)
-	
-	triangles.append(index + 3)
-	triangles.append(index + 2)
-	triangles.append(index)

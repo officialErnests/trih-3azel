@@ -37,6 +37,7 @@ environment = SubResource("Environment_4he8f")
 material_override = SubResource("StandardMaterial3D_4he8f")
 mesh = SubResource("ArrayMesh_8q0hw")
 script = ExtResource("1_8q0hw")
+floor_size = 2
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.95073783, 0.30999616, 0, -0.30999616, 0.95073783, 0, 1.6983718, 3.0992286)
