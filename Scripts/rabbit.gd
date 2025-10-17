@@ -261,6 +261,7 @@ func _physics_process(delta: float) -> void:
 		PLAYER_STATES.HIT_TROUGH:
 			if switch_state:
 				hit_trough_timer = 0
+				hit_trough_objects.append(blasstrough)
 				for i in range(HIT_TROUGH_CLONES):
 					var dublicate_hittrough = blasstrough.duplicate()
 					hit_trough_objects.append(dublicate_hittrough)
@@ -271,14 +272,13 @@ func _physics_process(delta: float) -> void:
 			hit_trough_timer += delta
 			var shake_strenght = 0.5 * (1 - (hit_trough_timer / HIT_TROUGH_TIME))
 			mesh.position = Vector3(randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght))
-			blasstrough.global_position += (global_position - blasstrough.global_position) * delta * HIT_TROUGH_PULL * ((hit_trough_timer / HIT_TROUGH_TIME) ** 2 - 0.1)
 			for iter_objc in hit_trough_objects:
 				iter_objc.global_position += (global_position - iter_objc.global_position) * delta * HIT_TROUGH_PULL * ((hit_trough_timer / HIT_TROUGH_TIME) ** 2 - 0.1)
 			if hit_trough_timer >= HIT_TROUGH_TIME:
 				velocity *= HIT_TROUGH_SPEED_MUL
 				for iter_objc in hit_trough_objects:
-					iter_objc.linear_velocity = velocity * 2
-					iter_objc.constant_force = velocity * Vector3(randf_range(0.1, 2), randf_range(0.1, 2), randf_range(0.1, 2))
+					iter_objc.linear_velocity = velocity * Vector3(randf_range(0, 2), randf_range(0, 2), randf_range(0, 2))
+					iter_objc.constant_force = velocity
 					iter_objc.delete_timer = HIT_TROUGH_DEBRIS_TIMER
 				# Switch states
 				blasstrough = null
