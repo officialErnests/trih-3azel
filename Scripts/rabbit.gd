@@ -119,14 +119,16 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void:
 	#Inputs
-	# if !is_on_floor():
-	# 	if ground_raycast.is_colliding():
+	var default_transform: Basis = Basis(Vector3.UP, movement_direction_node.rotation.y)
+	if ground_raycast.is_colliding():
+		print(default_transform)
+		default_transform = Basis(ground_raycast.get_collision_normal(), movement_direction_node.rotation.y)
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
-	var direction := (transform.basis * Vector3(
-						input_dir.x * sin(movement_direction_node.rotation.y + PI / 2) + input_dir.y * sin(movement_direction_node.rotation.y),
+	var direction := (default_transform * Vector3(
+						input_dir.x,
 						0,
-						input_dir.x * cos(movement_direction_node.rotation.y + PI / 2) + input_dir.y * cos(movement_direction_node.rotation.y))).normalized()
-	
+						input_dir.y))
+	$RayCast3D2.target_position = direction * 10
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
 
@@ -331,7 +333,6 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
-				print(velocity, velocity.normalized(), start_speed)
 				velocity = rail_positioner.transform.basis.y * start_speed
 				touching_rail.debounce()
 				rail_processing = false
@@ -341,7 +342,6 @@ func _physics_process(delta: float) -> void:
 
 			if rail_positioner.progress_ratio == 1:
 				# Switch states
-				print(velocity, velocity.normalized(), start_speed)
 				velocity = rail_positioner.transform.basis.z * start_speed
 				touching_rail.debounce()
 				rail_processing = false

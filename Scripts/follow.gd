@@ -21,7 +21,6 @@ func _process(delta: float) -> void:
 			global_position = nb_global_position
 		_:
 			velocity += (track_object.velocity.length() - velocity) * delta / 2
-			print(track_object.velocity.length() + 75 - velocity / 3)
 			fov = min(179, max(75, track_object.velocity.length() + 75 - velocity / 3))
 			var track_position = track_object.global_position + Vector3.UP
 			look_at(track_object.global_position + Vector3.UP)
