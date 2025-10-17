@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=8 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://clq1xjp614hft" path="res://Scenes/blast_trough.tscn" id="3_wrm1d"]
+[ext_resource type="PackedScene" uid="uid://dorwe6tyx2k5" path="res://Scenes/rail.tscn" id="4_3dryh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -87,5 +88,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.662647, 3, -171.0228)
 
 [node name="BlastTrough9" parent="." instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.7337, 3, -201.6112)
+
+[node name="Rail_Path" parent="." instance=ExtResource("4_3dryh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.829403, -0.98483527, -16.243309)
 
 [editable path="Rabbit"]
