@@ -5,6 +5,7 @@ extends Path3D
 @onready var visual_boxes = $visual
 var collider = null
 var path_lenght = 0
+var can_detect = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -27,7 +28,7 @@ func _ready() -> void:
 		visualiser_box.transform = follow_point.transform
 
 		var box_collider = BoxShape3D.new()
-		box_mesh.size = Vector3(0.25, 0.25, segmen_leght)
+		box_collider.size = Vector3(2, 2, segmen_leght)
 
 		var collision_box = CollisionShape3D.new()
 		collision_box.shape = box_collider
@@ -39,7 +40,12 @@ func _ready() -> void:
 
 	collider.body_entered.connect(_on_rail_collision_body_entered)
 
+func debounce():
+	can_detect = false
+	await get_tree().create_timer(0.5).timeout
+	can_detect = true
+
 
 func _on_rail_collision_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player") and body.touching_rail == null:
+	if body.is_in_group("Player") and body.touching_rail == null and can_detect:
 		body.touching_rail = self

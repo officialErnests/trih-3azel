@@ -20,4 +20,6 @@ transform = Transform3D(-0.5215932, -0.08060037, 0.8493711, -3.7252523e-09, 0.99
 use_model_front = true
 loop = false
 
+[node name="Area3D" type="Area3D" parent="Follo_point"]
+
 [node name="visual" type="Node3D" parent="."]

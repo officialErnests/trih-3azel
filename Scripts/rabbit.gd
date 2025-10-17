@@ -6,7 +6,6 @@ const JUMP_VELOCITY = 4.5
 enum PLAYER_STATES {
 	STILL,
 	START_MOVE,
-	START_DASH,
 	FAST_RUN,
 	QUICK_STOP,
 	RUNNING,
@@ -75,6 +74,10 @@ enum PLAYER_STATES {
 @export var HIT_TROUGH_SPEED_MUL: float = 1
 @export var HIT_TROUGH_CLONES: int = 1
 @export var HIT_TROUGH_DEBRIS_TIMER: int = 1
+#-GRINDING
+@export_subgroup("GRINDING")
+@export var GRINDING_MIN_SPEED: int = 1
+@export var GRINDING_ADDER: int = 1
 
 # Internal variables
 #OTHERS
@@ -246,6 +249,7 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, FALL_SPEED)
 			if is_on_floor():
 				curent_player_state = PLAYER_STATES.START_MOVE
+			blastTroughDetect()
 			railDetect()
 			move_and_slide()
 
@@ -262,6 +266,11 @@ func _physics_process(delta: float) -> void:
 					trick_time -= delta
 					if Input.is_action_just_pressed("Jump"):
 						# Switch states
+						if direction:
+							var prev_velocity = velocity.length()
+							velocity.x = 0
+							velocity.z = 0
+							add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
 						curent_player_state = PLAYER_STATES.JUMP_START
 				else:
 					# Switch states
@@ -303,17 +312,35 @@ func _physics_process(delta: float) -> void:
 
 		PLAYER_STATES.GRINDING:
 			if switch_state:
-				grind_position = 0
+				grind_position = touching_rail.curve.get_closest_offset(touching_rail.to_local(global_position))
 				rail_positioner = touching_rail.get_node("Follo_point")
 				rail_positioner.v_offset = 0.5
-				start_speed = velocity.length()
+				start_speed = max(velocity.length(), GRINDING_MIN_SPEED)
 
+			start_speed += GRINDING_ADDER * delta
+			rail_processing = true
 			grind_position += delta * start_speed
 			rail_positioner.progress = grind_position
 			global_position = rail_positioner.global_position
+			
+			if Input.is_action_just_pressed("Jump"):
+				# Switch states
+				print(velocity, velocity.normalized(), start_speed)
+				velocity = velocity.normalized() * start_speed
+				touching_rail.debounce()
+				rail_processing = false
+				touching_rail = null
+				curent_player_state = PLAYER_STATES.TRICK
+
 
 			if rail_positioner.progress_ratio == 1:
 				# Switch states
+				print(velocity, velocity.normalized(), start_speed)
+				velocity = rail_positioner.transform.basis.z * start_speed
+				touching_rail.debounce()
+				rail_processing = false
+				touching_rail = null
+				rail_positioner = null
 				curent_player_state = PLAYER_STATES.FALL
 
 		_:
