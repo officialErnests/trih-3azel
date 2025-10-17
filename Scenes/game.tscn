@@ -62,11 +62,15 @@ FALL_GRAVITY = 40.0
 TRICK_TIME = 0.2
 TRICK_FORCE = 4.0
 TRICK_GRAVITY = 2.0
+HIT_TROUGH_CLONES = 10
+HIT_TROUGH_DEBRIS_TIMER = 10
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -379.5111, 133.65538, 427.7413)
 
 [node name="BlastTrough" parent="." instance=ExtResource("3_wrm1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19732594, 0.41033912, -8.553368)
+
+[node name="Debriss" type="Node3D" parent="."]
 
 [editable path="Rabbit"]

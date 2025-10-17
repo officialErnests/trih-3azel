@@ -74,6 +74,8 @@ enum PLAYER_STATES {
 @export var HIT_TROUGH_TIME: float = 1
 @export var HIT_TROUGH_PULL: float = 1
 @export var HIT_TROUGH_SPEED_MUL: float = 1
+@export var HIT_TROUGH_CLONES: int = 1
+@export var HIT_TROUGH_DEBRIS_TIMER: int = 1
 
 # Internal variables
 #OTHERS
@@ -82,6 +84,7 @@ var prev_player_state = curent_player_state
 var blasstrough = null
 @onready var mesh = $MeshInstance3D
 @onready var ground_raycast = $RayCast3D
+var debriss = null
 #-START_MOVE
 var start_move = 0
 #-QUICK_STOP
@@ -91,12 +94,16 @@ var speed_before = 0
 var trick_time = 0
 #-HIT_TROUGH
 var hit_trough_timer = 0
+var hit_trough_objects = []
+
+
 func _init() -> void:
 	Global.player = self
 
 func _ready() -> void:
 	slow_down_timer = QUICK_STOP_SLOW_DOWN_TIME
 	start_move = START_MOVE_TIME
+	debriss = get_parent().get_node("Debriss")
 	
 func _physics_process(delta: float) -> void:
 	#Inputs
@@ -161,14 +168,10 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("Jump"):
 						curent_player_state = PLAYER_STATES.TRICK
 			multiplyVelocity2D(1 - (delta * FAST_RUN_SLOW_DOWN))
-			if blasstrough != null:
-				blasstrough.hit.emit()
-				# Switch states
-				curent_player_state = PLAYER_STATES.HIT_TROUGH
 			if (velocity.length() < FAST_RUN_STOP_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.QUICK_STOP
-
+			blastTroughDetect()
 			snapToGround()
 			move_and_slide()
 		
@@ -208,6 +211,7 @@ func _physics_process(delta: float) -> void:
 			if (velocity.length() < RUNNING_TRESHOLD):
 				# Switch states
 				curent_player_state = PLAYER_STATES.START_MOVE
+			blastTroughDetect()
 			snapToGround()
 			move_and_slide()
 
@@ -257,13 +261,27 @@ func _physics_process(delta: float) -> void:
 		PLAYER_STATES.HIT_TROUGH:
 			if switch_state:
 				hit_trough_timer = 0
-				velocity *= HIT_TROUGH_SPEED_MUL
+				for i in range(HIT_TROUGH_CLONES):
+					var dublicate_hittrough = blasstrough.duplicate()
+					hit_trough_objects.append(dublicate_hittrough)
+					debriss.add_child(dublicate_hittrough)
+					dublicate_hittrough.linear_velocity = velocity * Vector3(randf_range(0.1, 2), randf_range(0.1, 2), randf_range(0.1, 2))
+					dublicate_hittrough.has_been_hit = true
+					 
 			hit_trough_timer += delta
 			var shake_strenght = 0.5 * (1 - (hit_trough_timer / HIT_TROUGH_TIME))
 			mesh.position = Vector3(randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght), randf_range(-shake_strenght, shake_strenght))
 			blasstrough.global_position += (global_position - blasstrough.global_position) * delta * HIT_TROUGH_PULL * ((hit_trough_timer / HIT_TROUGH_TIME) ** 2 - 0.1)
+			for iter_objc in hit_trough_objects:
+				iter_objc.global_position += (global_position - iter_objc.global_position) * delta * HIT_TROUGH_PULL * ((hit_trough_timer / HIT_TROUGH_TIME) ** 2 - 0.1)
 			if hit_trough_timer >= HIT_TROUGH_TIME:
+				velocity *= HIT_TROUGH_SPEED_MUL
+				for iter_objc in hit_trough_objects:
+					iter_objc.linear_velocity = velocity * 2
+					iter_objc.constant_force = velocity * Vector3(randf_range(0.1, 2), randf_range(0.1, 2), randf_range(0.1, 2))
+					iter_objc.delete_timer = HIT_TROUGH_DEBRIS_TIMER
 				# Switch states
+				blasstrough = null
 				mesh.position = Vector3.ZERO
 				curent_player_state = PLAYER_STATES.RUNNING
 
@@ -287,3 +305,9 @@ func snapToGround():
 			velocity.y += (ground_raycast.get_collision_point().y - global_position.y) * 2
 		else:
 			curent_player_state = PLAYER_STATES.FALL
+
+func blastTroughDetect():
+	if blasstrough != null:
+		blasstrough.hit.emit()
+		# Switch states
+		curent_player_state = PLAYER_STATES.HIT_TROUGH

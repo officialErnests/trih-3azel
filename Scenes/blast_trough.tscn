@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://nx7f8e0nem3d" path="res://Scripts/blast_trough.gd" id="1_k0s8m"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k0s8m"]
+friction = 0.1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c0upd"]
 
