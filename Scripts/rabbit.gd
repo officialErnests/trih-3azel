@@ -119,6 +119,8 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void:
 	#Inputs
+	# if !is_on_floor():
+	# 	if ground_raycast.is_colliding():
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
 	var direction := (transform.basis * Vector3(
 						input_dir.x * sin(movement_direction_node.rotation.y + PI / 2) + input_dir.y * sin(movement_direction_node.rotation.y),
@@ -170,6 +172,7 @@ func _physics_process(delta: float) -> void:
 					# Switch states
 					curent_player_state = PLAYER_STATES.STILL
 
+			railDetect()
 			snapToGround()
 			move_and_slide()
 
@@ -187,6 +190,7 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.QUICK_STOP
 			blastTroughDetect()
 			snapToGround()
+			railDetect()
 			move_and_slide()
 		
 		PLAYER_STATES.QUICK_STOP:
@@ -211,6 +215,7 @@ func _physics_process(delta: float) -> void:
 				velocity = Vector3.ZERO
 				curent_player_state = PLAYER_STATES.STILL
 			snapToGround()
+			railDetect()
 			move_and_slide()
 
 		PLAYER_STATES.RUNNING:
@@ -227,6 +232,7 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.START_MOVE
 			blastTroughDetect()
 			snapToGround()
+			railDetect()
 			move_and_slide()
 
 		PLAYER_STATES.JUMP_START:
@@ -326,7 +332,7 @@ func _physics_process(delta: float) -> void:
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
 				print(velocity, velocity.normalized(), start_speed)
-				velocity = velocity.normalized() * start_speed
+				velocity = rail_positioner.transform.basis.y * start_speed
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null

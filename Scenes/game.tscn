@@ -1,9 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
-[ext_resource type="PackedScene" uid="uid://clq1xjp614hft" path="res://Scenes/blast_trough.tscn" id="3_wrm1d"]
-[ext_resource type="PackedScene" uid="uid://dorwe6tyx2k5" path="res://Scenes/rail.tscn" id="4_3dryh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -36,6 +34,8 @@ fog_depth_curve = 1.9999982
 fog_depth_end = 1048.1
 adjustment_enabled = true
 adjustment_saturation = 8.0
+
+[sub_resource type="Curve3D" id="Curve3D_qxrlw"]
 
 [node name="Game" type="Node3D"]
 
@@ -70,24 +70,17 @@ TRICK_GRAVITY = 16.0
 TRICK_SLOW_DOWN = 0.1
 HIT_TROUGH_CLONES = 10
 HIT_TROUGH_DEBRIS_TIMER = 10
-GRINDING_MIN_SPEED = 100
+GRINDING_MIN_SPEED = 10
+GRINDING_ADDER = 10
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -379.5111, 133.65538, 427.7413)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 575.9912, 196.60815, 427.7413)
 
 [node name="Debriss" type="Node3D" parent="."]
 
-[node name="BlastTrough" parent="." instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.500805, 1.0343804, -10.749961)
+[node name="RAILS" type="Node3D" parent="."]
 
-[node name="BlastTrough3" parent="." instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.760536, 24.973328, -66.51422)
-gravity_scale = 0.0
-
-[node name="BlastTrough2" parent="." instance=ExtResource("3_wrm1d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.857147, 1.0343804, -10.749961)
-
-[node name="Rail_Path" parent="." instance=ExtResource("4_3dryh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.829403, -0.98483527, -16.243309)
+[node name="Path3D" type="Path3D" parent="RAILS"]
+curve = SubResource("Curve3D_qxrlw")
 
 [editable path="Rabbit"]

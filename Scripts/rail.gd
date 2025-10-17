@@ -1,6 +1,7 @@
 extends Path3D
 
 @export var segmen_leght = 1
+@export var structure = 1
 @onready var follow_point = $Follo_point
 @onready var visual_boxes = $visual
 var collider = null
