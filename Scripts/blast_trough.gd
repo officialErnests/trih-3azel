@@ -16,7 +16,7 @@ func hit_trough():
 func _process(delta: float) -> void:
 	if delete_timer != -1:
 		delete_timer -= delta
-		cube.scale = Vector3.ONE * (delete_timer / 5 * 50)
+		cube.scale = Vector3.ONE * (delete_timer / 5 * 100)
 		if delete_timer <= 0:
 			queue_free()
 			return

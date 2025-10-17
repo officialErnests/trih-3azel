@@ -277,9 +277,10 @@ func _physics_process(delta: float) -> void:
 			if hit_trough_timer >= HIT_TROUGH_TIME:
 				velocity *= HIT_TROUGH_SPEED_MUL
 				for iter_objc in hit_trough_objects:
-					iter_objc.linear_velocity = velocity * Vector3(randf_range(0, 2), randf_range(0, 2), randf_range(0, 2))
+					iter_objc.linear_velocity = velocity * Vector3(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
 					iter_objc.constant_force = velocity
 					iter_objc.delete_timer = HIT_TROUGH_DEBRIS_TIMER
+				hit_trough_objects.clear()
 				# Switch states
 				blasstrough = null
 				mesh.position = Vector3.ZERO
