@@ -21,7 +21,5 @@ func _process(delta: float) -> void:
 			queue_free()
 			return
 func _on_body_entered(body: Node) -> void:
-	if !has_been_hit and body.is_in_group("Player") and \
-	(body.curent_player_state == body.PLAYER_STATES.FAST_RUN or \
-	body.curent_player_state == body.PLAYER_STATES.RUNNING):
+	if !has_been_hit and body.is_in_group("Player") and body.blasstrough == null:
 		body.blasstrough = self

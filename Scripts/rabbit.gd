@@ -14,10 +14,9 @@ enum PLAYER_STATES {
 	FALL,
 	TRICK,
 	HIT_TROUGH,
-
 	GRINDING,
-	WALL_RUN_R,
-	WALL_RUN_L
+	
+	FAST_AIR,
 }
 
 #OTHERS
@@ -81,10 +80,17 @@ enum PLAYER_STATES {
 #OTHERS
 var curent_player_state = PLAYER_STATES.STILL
 var prev_player_state = curent_player_state
-var blasstrough = null
 @onready var mesh = $MeshInstance3D
 @onready var ground_raycast = $RayCast3D
+#Collision with objects such as rail or blasstrough
+#=Rails
+var rail_processing = false
+var touching_rail = null
+#=Blasstrough
+var blasstrough_processing = false
+var blasstrough = null
 var debriss = null
+# Movement
 #-START_MOVE
 var start_move = 0
 #-QUICK_STOP
@@ -95,7 +101,10 @@ var trick_time = 0
 #-HIT_TROUGH
 var hit_trough_timer = 0
 var hit_trough_objects = []
-
+#-GRINDING
+var grind_position = 0
+var rail_positioner = null
+var start_speed = 0
 
 func _init() -> void:
 	Global.player = self
@@ -115,8 +124,10 @@ func _physics_process(delta: float) -> void:
 	
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
-	# print(PLAYER_STATES.find_key(curent_player_state))
+
 	#Processes player states
+	blasstrough_processing = false
+	rail_processing = false
 	match curent_player_state:
 		PLAYER_STATES.STILL:
 			if Input.is_action_just_pressed("Jump"):
@@ -226,6 +237,7 @@ func _physics_process(delta: float) -> void:
 			if velocity.y <= 0:
 				# Switch states
 				curent_player_state = PLAYER_STATES.FALL
+			railDetect()
 			move_and_slide()
 		
 		PLAYER_STATES.FALL:
@@ -234,6 +246,7 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, FALL_SPEED)
 			if is_on_floor():
 				curent_player_state = PLAYER_STATES.START_MOVE
+			railDetect()
 			move_and_slide()
 
 		PLAYER_STATES.TRICK:
@@ -255,10 +268,11 @@ func _physics_process(delta: float) -> void:
 					curent_player_state = PLAYER_STATES.FALL
 			else:
 				velocity.y -= JUMP_START_GRAVITY * delta
-
+			railDetect()
 			move_and_slide()
 
 		PLAYER_STATES.HIT_TROUGH:
+			blasstrough_processing = true
 			if switch_state:
 				hit_trough_timer = 0
 				hit_trough_objects.append(blasstrough)
@@ -281,13 +295,35 @@ func _physics_process(delta: float) -> void:
 					iter_objc.constant_force = velocity
 					iter_objc.delete_timer = HIT_TROUGH_DEBRIS_TIMER
 				hit_trough_objects.clear()
+				blasstrough_processing = false
 				# Switch states
 				blasstrough = null
 				mesh.position = Vector3.ZERO
 				curent_player_state = PLAYER_STATES.RUNNING
 
+		PLAYER_STATES.GRINDING:
+			if switch_state:
+				grind_position = 0
+				rail_positioner = touching_rail.get_node("Follo_point")
+				rail_positioner.v_offset = 0.5
+				start_speed = velocity.length()
+
+			grind_position += delta * start_speed
+			rail_positioner.progress = grind_position
+			global_position = rail_positioner.global_position
+
+			if rail_positioner.progress_ratio == 1:
+				# Switch states
+				curent_player_state = PLAYER_STATES.FALL
+
 		_:
 			curent_player_state = PLAYER_STATES.START_MOVE
+	
+	if blasstrough != null and !blasstrough_processing:
+		blasstrough = null
+
+	if touching_rail != null and !rail_processing:
+		touching_rail = null
 		
 
 func multiplyVelocity2D(slowness):
@@ -309,6 +345,13 @@ func snapToGround():
 
 func blastTroughDetect():
 	if blasstrough != null:
+		blasstrough_processing = true
 		blasstrough.hit.emit()
 		# Switch states
 		curent_player_state = PLAYER_STATES.HIT_TROUGH
+
+func railDetect():
+	if touching_rail != null:
+		rail_processing = true
+		# Switch states
+		curent_player_state = PLAYER_STATES.GRINDING

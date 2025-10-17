@@ -10,7 +10,7 @@ var path_lenght = 0
 func _ready() -> void:
 	follow_point.progress_ratio = 1
 	path_lenght = follow_point.progress
-	
+
 	collider = Area3D.new()
 	collider.name = "Rail_collision"
 	add_child(collider)
@@ -41,5 +41,5 @@ func _ready() -> void:
 
 
 func _on_rail_collision_body_entered(body: Node3D) -> void:
-	print(body.name)
-	# if body.is_in_group("Player"):
+	if body.is_in_group("Player") and body.touching_rail == null:
+		body.touching_rail = self
