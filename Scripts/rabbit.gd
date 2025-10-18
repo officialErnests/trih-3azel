@@ -117,18 +117,25 @@ func _ready() -> void:
 	start_move = START_MOVE_TIME
 	debriss = get_parent().get_node("Debriss")
 	
+var debugTimer = 0
 func _physics_process(delta: float) -> void:
 	#Inputs
-	var default_transform: Basis = Basis(Vector3.UP, movement_direction_node.rotation.y)
+	debugTimer += delta
+	var default_transform: Basis
+	default_transform = Basis(Vector3.UP, movement_direction_node.rotation.y)
 	if ground_raycast.is_colliding():
-		print(default_transform)
-		default_transform = Basis(ground_raycast.get_collision_normal(), movement_direction_node.rotation.y)
+		var raycast_normal = ground_raycast.get_collision_normal()
+		$RayCast3D3.target_position = raycast_normal * 10
+		#make vertex rotate 90 degrees 
+		#Create basis from 3 vectors3d
+		$RayCast3D4.target_position = Basis(Vector3.UP, debugTimer) * Vector3.UP
+
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
 	var direction := (default_transform * Vector3(
 						input_dir.x,
 						0,
 						input_dir.y))
-	$RayCast3D2.target_position = direction * 10
+	$RayCast3D2.target_position = velocity * 10
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
 

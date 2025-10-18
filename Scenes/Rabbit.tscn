@@ -55,3 +55,8 @@ stalk_distance = 3
 [node name="RayCast3D" type="RayCast3D" parent="."]
 
 [node name="RayCast3D2" type="RayCast3D" parent="."]
+
+[node name="RayCast3D3" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="RayCast3D4" type="RayCast3D" parent="."]
