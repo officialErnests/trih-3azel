@@ -1,12 +1,39 @@
-[gd_scene load_steps=5 format=3 uid="uid://dorwe6tyx2k5"]
+[gd_scene load_steps=6 format=4 uid="uid://dorwe6tyx2k5"]
 
 [ext_resource type="Script" uid="uid://bq5feu2xc3n2s" path="res://Scripts/rail.gd" id="1_6scoo"]
 [ext_resource type="Material" uid="uid://cjn6xeltanv7b" path="res://Assets/3D_Assets/rail.tres" id="2_3fs6a"]
 
 [sub_resource type="Curve3D" id="Curve3D_wxdfp"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.223549, 3.1206446, 6.064715, 0, 0, 0, 0, 0, 0, -4.737835, 4.4256015, 10.493297),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 up_vector_enabled = false
 
-[sub_resource type="BoxMesh" id="BoxMesh_3fs6a"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1woie"]
+resource_name = "Material.001"
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_x0uvj"]
+resource_name = "Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.01, -0.01, -0.01, 0.02, 0.02, 0.02),
+"attribute_data": PackedByteArray("AACAPwAAAAAAAIA/AACAPwAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAgD8AAIA/AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAIA/AACAPwAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAgD8AAIA/AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAAAAAAAAA"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQA"),
+"material": SubResource("StandardMaterial3D_1woie"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("CtcjvArXIzwK1yM8CtcjvArXI7wK1yM8CtcjvArXI7wK1yO8CtcjvArXIzwK1yO8CtcjPArXIzwK1yM8CtcjvArXIzwK1yM8CtcjvArXIzwK1yO8CtcjPArXIzwK1yO8CtcjPArXI7wK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yO8CtcjPArXI7wK1yO8CtcjvArXI7wK1yM8CtcjPArXI7wK1yM8CtcjPArXI7wK1yO8CtcjvArXI7wK1yO8CtcjPArXI7wK1yO8CtcjPArXIzwK1yO8CtcjvArXIzwK1yO8CtcjvArXI7wK1yO8CtcjvArXI7wK1yM8CtcjvArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXI7wK1yM8AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//7//f////3//v/9/////f/+//3////9//7//f////3//v////3//f/+/////f/9//7////9//3//v////3//f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//38AAP9//7//////////v/////////+//////////7//////////v/9//38AAP+//3//fwAA/7//f/9/AAD/v/9//38AAP+/")
+}]
+blend_shape_mode = 0
 
 [node name="Rail_Path" type="Path3D"]
 curve = SubResource("Curve3D_wxdfp")
@@ -14,7 +41,7 @@ debug_custom_color = Color(1, 0, 0, 1)
 script = ExtResource("1_6scoo")
 
 [node name="Follo_point" type="PathFollow3D" parent="."]
-transform = Transform3D(-0.40296358, 0.8164152, 0.41360435, 0.8984413, 0.43898225, 0.008817443, -0.17436679, 0.37515295, -0.9104114, -67.81612, 18.411655, -38.591866)
+transform = Transform3D(0.8696127, 0.122553885, -0.47826546, 3.725253e-09, 0.96869063, 0.24822791, 0.4937145, -0.21586242, 0.8424012, -2.223549, 3.1206446, 6.064715)
 use_model_front = true
 loop = false
 
@@ -23,5 +50,6 @@ loop = false
 [node name="visual" type="Node3D" parent="."]
 
 [node name="Cube" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 99.99999, 0, 0, 0, 99.99999, 0, 0, 0)
 material_override = ExtResource("2_3fs6a")
-mesh = SubResource("BoxMesh_3fs6a")
+mesh = SubResource("ArrayMesh_x0uvj")

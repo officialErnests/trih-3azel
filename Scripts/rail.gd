@@ -23,9 +23,7 @@ func _ready() -> void:
 
 		var visualiser_box = MeshInstance3D.new()
 		visualiser_box.mesh = copy_cube.mesh
-		visualiser_box.scale = Vector3(100, 100, 100)
-		# visualiser_box.material_override = 
-		# visualiser_box.scale = Vector3(100, 100, segmen_leght * 1000)
+		visualiser_box.material_override = copy_cube.material_override
 		visualiser_box.name = "vsBOX_" + str(i)
 		visualiser_box.transform = follow_point.transform
 
@@ -38,7 +36,20 @@ func _ready() -> void:
 		collision_box.transform = follow_point.transform
 
 		visual_boxes.add_child(visualiser_box)
+		visualiser_box.scale = Vector3(25, 25, segmen_leght * 100)
+
 		collider.add_child(collision_box)
+
+		if i % 10 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
+			var support_box = MeshInstance3D.new()
+			support_box.mesh = copy_cube.mesh
+			support_box.material_override = copy_cube.material_override
+			support_box.name = "vsBOX_" + str(i)
+			support_box.transform = follow_point.transform
+			support_box.position -= follow_point.transform.basis.y * 10
+			visual_boxes.add_child(support_box)
+			support_box.scale = Vector3(25, 1000, 25)
+
 
 	collider.body_entered.connect(_on_rail_collision_body_entered)
 
