@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=9 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
+[ext_resource type="Script" uid="uid://7j4jtxrpw5fk" path="res://Scripts/pathToRail.gd" id="3_3dryh"]
+[ext_resource type="Script" uid="uid://dpwqhsut0wvj8" path="res://Scripts/follow.gd" id="3_wrm1d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -36,6 +38,11 @@ adjustment_enabled = true
 adjustment_saturation = 8.0
 
 [sub_resource type="Curve3D" id="Curve3D_qxrlw"]
+_data = {
+"points": PackedVector3Array(-0.630003, -1.2479903, -3.4432487, 0.630003, 1.2479903, 3.4432487, 0.027633667, -0.037036538, 0.021297455, -2.9076595, -0.72495997, -0.050632477, 2.9076595, 0.72495997, 0.050632477, 20.911621, 1.2532014, 5.490799, -12.609329, -8.220109, -7.552971, 12.609329, 8.220109, 7.552971, 61.301178, 8.36202, 15.198029, -3.8030624, -6.800541, -19.933357, 3.8030624, 6.800541, 19.933357, 118.30202, 40.18132, 78.9836, -2.5501099, -24.049828, -20.80568, 2.5501099, 24.049828, 20.80568, 101.47389, 105.19749, 189.29216),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="Game" type="Node3D"]
 
@@ -47,8 +54,9 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 light_energy = 0.08
 light_specular = 0.0
 
-[node name="Rabbit" parent="." instance=ExtResource("1_ebmjs")]
+[node name="Rabbit" parent="." node_paths=PackedStringArray("movement_direction_node") instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+movement_direction_node = NodePath("../Camera3D")
 START_MOVE_TIME = 2.0
 START_MOVE_SPEED = 1.0
 START_MOVE_FAST_SLOW_DOWN = 1.0
@@ -81,6 +89,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 575.9912, 196.60815, 427.7413
 [node name="RAILS" type="Node3D" parent="."]
 
 [node name="Path3D" type="Path3D" parent="RAILS"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.479818, 2.1349282, 51.867172)
 curve = SubResource("Curve3D_qxrlw")
+script = ExtResource("3_3dryh")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("track_object")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+current = true
+script = ExtResource("3_wrm1d")
+stalk_distance = 3
+track_object = NodePath("../Rabbit")
 
 [editable path="Rabbit"]

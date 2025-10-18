@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://ca3vfexx3chtr"]
+[gd_scene load_steps=5 format=3 uid="uid://ca3vfexx3chtr"]
 
 [ext_resource type="Script" uid="uid://rvui52ia7vmg" path="res://Scripts/rabbit.gd" id="1_i4mnj"]
-[ext_resource type="Script" uid="uid://dpwqhsut0wvj8" path="res://Scripts/follow.gd" id="2_78qo1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rtlo7"]
 radius = 0.25
@@ -21,7 +20,7 @@ axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 script = ExtResource("1_i4mnj")
-movement_direction_node = NodePath("Camera3D")
+movement_direction_node = NodePath("")
 STILL_SPEED = 20.0
 START_MOVE_SPEED = 0.8
 START_MOVE_FAST_SLOW_DOWN = 4.0
@@ -47,16 +46,4 @@ shape = SubResource("SphereShape3D_rtlo7")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_78qo1")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
-script = ExtResource("2_78qo1")
-stalk_distance = 3
-
 [node name="RayCast3D" type="RayCast3D" parent="."]
-
-[node name="RayCast3D2" type="RayCast3D" parent="."]
-
-[node name="RayCast3D3" type="RayCast3D" parent="."]
-debug_shape_custom_color = Color(1, 0, 0, 1)
-
-[node name="RayCast3D4" type="RayCast3D" parent="."]

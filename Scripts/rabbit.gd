@@ -121,21 +121,24 @@ var debugTimer = 0
 func _physics_process(delta: float) -> void:
 	#Inputs
 	debugTimer += delta
-	var default_transform: Basis
-	default_transform = Basis(Vector3.UP, movement_direction_node.rotation.y)
-	if ground_raycast.is_colliding():
-		var raycast_normal = ground_raycast.get_collision_normal()
-		$RayCast3D3.target_position = raycast_normal * 10
-		#make vertex rotate 90 degrees 
-		#Create basis from 3 vectors3d
-		$RayCast3D4.target_position = Basis(Vector3.UP, debugTimer) * Vector3.UP
 
 	var input_dir := Input.get_vector("Left", "Right", "Foward", "Backward")
-	var direction := (default_transform * Vector3(
-						input_dir.x,
-						0,
-						input_dir.y))
-	$RayCast3D2.target_position = velocity * 10
+	var direction
+
+	if ground_raycast.is_colliding():
+		var raycast_normal = ground_raycast.get_collision_normal()
+		var default_transform = Basis(
+			Vector3(-raycast_normal.y, raycast_normal.x, raycast_normal.z),
+			raycast_normal,
+			Vector3(raycast_normal.x, raycast_normal.z, -raycast_normal.y)).rotated(raycast_normal, movement_direction_node.rotation.y)
+		direction = (default_transform.rotated(raycast_normal, Vector2(-input_dir.y, -input_dir.x).angle()) * (Vector3.BACK if input_dir else Vector3.ZERO)).normalized()
+	else:
+		var default_transform = Basis(Vector3.UP, movement_direction_node.rotation.y)
+		direction = (default_transform * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		
+
+	if position.y < -100:
+		velocity.y = 200
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
 
@@ -149,7 +152,7 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.JUMP_START
 
 			if direction:
-				add_velocity(delta, direction, STILL_SPEED)
+				add_floor_velocity(delta, direction, STILL_SPEED)
 				# Switch states
 				curent_player_state = PLAYER_STATES.START_MOVE
 			snapToGround()
@@ -162,13 +165,13 @@ func _physics_process(delta: float) -> void:
 			start_move -= delta
 			
 			if direction:
-				add_velocity(delta, direction, START_MOVE_SPEED)
+				add_floor_velocity(delta, direction, START_MOVE_SPEED)
 				multiplyVelocity2D(1 - (delta * (1.0 - (max(start_move, 0) / START_MOVE_TIME * 1.1)) * START_MOVE_SLOW_DOWN))
 				if Input.is_action_just_pressed("Jump"):
 					var prev_velocity = velocity.length()
 					velocity.x = 0
 					velocity.z = 0
-					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
+					add_floor_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
 					# Switch states
 					curent_player_state = PLAYER_STATES.FAST_RUN
 			else:
@@ -189,7 +192,7 @@ func _physics_process(delta: float) -> void:
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
-				add_velocity(delta, direction, FAST_RUN_SPEED)
+				add_floor_velocity(delta, direction, FAST_RUN_SPEED)
 			else:
 				if Input.is_action_just_pressed("Jump"):
 						curent_player_state = PLAYER_STATES.TRICK
@@ -216,7 +219,7 @@ func _physics_process(delta: float) -> void:
 				var prev_velocity = velocity.length()
 				velocity.x = 0
 				velocity.z = 0
-				add_velocity(delta, direction, prev_velocity * speed_before * QUICK_STOP_RELESE_MUL)
+				add_floor_velocity(delta, direction, prev_velocity * speed_before * QUICK_STOP_RELESE_MUL)
 				# Switch states
 				curent_player_state = PLAYER_STATES.RUNNING
 			if slow_down_timer <= 0:
@@ -231,7 +234,7 @@ func _physics_process(delta: float) -> void:
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
-				add_velocity(delta, direction, RUNNING_SPEED)
+				add_floor_velocity(delta, direction, RUNNING_SPEED)
 				multiplyVelocity2D(1 - (delta * RUNNING_SLOW_DOWN))
 			else:
 				if Input.is_action_just_pressed("Jump"):
@@ -276,17 +279,18 @@ func _physics_process(delta: float) -> void:
 				add_velocity(delta, direction, TRICK_SPEED)
 				multiplyVelocity2D(1 - (delta * TRICK_SLOW_DOWN))
 
+			if Input.is_action_just_pressed("Jump"):
+				# Switch states
+				if direction:
+					var prev_velocity = velocity.length()
+					velocity.x = 0
+					velocity.z = 0
+					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
+				curent_player_state = PLAYER_STATES.JUMP_START
+			
 			if velocity.y <= 0:
 				if trick_time > 0:
 					trick_time -= delta
-					if Input.is_action_just_pressed("Jump"):
-						# Switch states
-						if direction:
-							var prev_velocity = velocity.length()
-							velocity.x = 0
-							velocity.z = 0
-							add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
-						curent_player_state = PLAYER_STATES.JUMP_START
 				else:
 					# Switch states
 					curent_player_state = PLAYER_STATES.FALL
@@ -340,7 +344,8 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
-				velocity = rail_positioner.transform.basis.y * start_speed
+				velocity = rail_positioner.transform.basis.z * start_speed
+				velocity += rail_positioner.transform.basis.y * 100
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
@@ -372,14 +377,19 @@ func multiplyVelocity2D(slowness):
 	velocity.x = vel_mul.x
 	velocity.z = vel_mul.y
 
+func add_floor_velocity(delta, direction, in_velocity):
+	add_velocity(delta, direction, in_velocity)
+	velocity.y += -1
+
 func add_velocity(delta, direction, in_velocity):
 	velocity.x += direction.x * in_velocity * delta * 10
+	velocity.y += direction.y * in_velocity * delta * 10
 	velocity.z += direction.z * in_velocity * delta * 10
 
 func snapToGround():
 	if !is_on_floor():
 		if ground_raycast.is_colliding():
-			velocity.y += (ground_raycast.get_collision_point().y - global_position.y) * 2
+			velocity.y += -1
 		else:
 			curent_player_state = PLAYER_STATES.FALL
 
