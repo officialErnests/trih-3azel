@@ -187,7 +187,7 @@ func _physics_process(delta: float) -> void:
 					velocity.z = 0
 					# Switch states
 					curent_player_state = PLAYER_STATES.STILL
-
+			blastTroughDetect()
 			railDetect()
 			snapToGround()
 			move_and_slide()
@@ -230,6 +230,7 @@ func _physics_process(delta: float) -> void:
 				# Switch states
 				velocity = Vector3.ZERO
 				curent_player_state = PLAYER_STATES.STILL
+			blastTroughDetect()
 			snapToGround()
 			railDetect()
 			move_and_slide()
@@ -262,6 +263,7 @@ func _physics_process(delta: float) -> void:
 			if velocity.y <= 0:
 				# Switch states
 				curent_player_state = PLAYER_STATES.FALL
+			blastTroughDetect()
 			railDetect()
 			move_and_slide()
 		
@@ -300,6 +302,7 @@ func _physics_process(delta: float) -> void:
 					curent_player_state = PLAYER_STATES.FALL
 			else:
 				velocity.y -= JUMP_START_GRAVITY * delta
+			blastTroughDetect()
 			railDetect()
 			move_and_slide()
 
@@ -312,6 +315,7 @@ func _physics_process(delta: float) -> void:
 					var dublicate_hittrough = blasstrough.duplicate()
 					hit_trough_objects.append(dublicate_hittrough)
 					debriss.add_child(dublicate_hittrough)
+					dublicate_hittrough.global_position = blasstrough.global_position
 					dublicate_hittrough.linear_velocity = velocity * Vector3(randf_range(0.1, 2), randf_range(0.1, 2), randf_range(0.1, 2))
 					dublicate_hittrough.has_been_hit = true
 					 
@@ -388,6 +392,7 @@ func _physics_process(delta: float) -> void:
 					curent_player_state = PLAYER_STATES.FALL
 			else:
 				velocity.y -= JUMP_START_GRAVITY * delta
+			blastTroughDetect()
 			railDetect()
 			move_and_slide()
 		_:

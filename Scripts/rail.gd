@@ -40,7 +40,7 @@ func _ready() -> void:
 
 		collider.add_child(collision_box)
 
-		if i % 10 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
+		if i % 30 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
 			var support_box = MeshInstance3D.new()
 			support_box.mesh = copy_cube.mesh
 			support_box.material_override = copy_cube.material_override

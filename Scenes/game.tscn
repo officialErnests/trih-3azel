@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=11 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
 [ext_resource type="Script" uid="uid://7j4jtxrpw5fk" path="res://Scripts/pathToRail.gd" id="3_3dryh"]
 [ext_resource type="Script" uid="uid://dpwqhsut0wvj8" path="res://Scripts/follow.gd" id="3_wrm1d"]
+[ext_resource type="Script" uid="uid://cg5axuaqisu8" path="res://Scripts/object_generator.gd" id="5_wowpa"]
+[ext_resource type="PackedScene" uid="uid://clq1xjp614hft" path="res://Scenes/blast_trough.tscn" id="6_i6g32"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -39,8 +41,8 @@ adjustment_saturation = 8.0
 
 [sub_resource type="Curve3D" id="Curve3D_qxrlw"]
 _data = {
-"points": PackedVector3Array(-2.9076595, -0.72495997, -0.050632477, 2.9076595, 0.72495997, 0.050632477, 20.911621, 1.2532014, 5.490799, -12.998787, -12.947705, -7.6130714, 12.998787, 12.947705, 7.6130714, 61.301178, 8.36202, 15.198029, -5.9370193, -40.32258, -54.258423, 5.9370193, 40.32258, 54.258423, 119.178734, 39.705193, 78.54465, 50.06136, 17.391708, -23.644974, -50.06136, -17.391708, 23.644974, 20.608246, 86.19471, 221.16951, -7.389946, 22.947914, 14.312851, 7.389946, -22.947914, -14.312851, -26.880741, 12.03211, 146.80763, -23.331024, -30.511099, -12.670853, 23.331024, 30.511099, 12.670853, -120.44357, 78.666145, -4.917038, 31.05539, 66.348724, -10.056526, -31.05539, -66.348724, 10.056526, -172.46759, 80.4909, -0.9333613, -64.04227, -14.915489, 21.19724, 64.04227, 14.915489, -21.19724, -88.1102, 25.433294, 21.436998, 78.97803, -40.101105, 14.198467, -78.97803, 40.101105, -14.198467, -126.091995, 71.12039, 60.600582),
-"tilts": PackedFloat32Array(0, 0.7430516, 0.51446325, 1.0973945, -0.20583479, -2.00614, -1.681774, 2.43084, -1.4732605)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 8.382, 2.102, 0.139, -9.980448, -3.6955342, 5.346283, 9.980448, 3.6955342, -5.346283, 32.325653, 6.2857985, -2.323368, 0.042816162, -4.074606, 2.5858688, -0.042816162, 4.074606, -2.5858688, 41.353054, 23.376596, -16.969051, 13.472603, -5.3182106, -0.86678314, -13.472603, 5.3182106, 0.86678314, 33.00533, 50.0379, -33.298443, -1.7559319, 24.933525, -27.14502, 1.7559319, -24.933525, 27.14502, -2.8330493, 14.441103, -18.287281, -22.981201, -3.8157768, 4.886158, 22.981201, 3.8157768, -4.886158, 41.928444, 34.713795, 36.29403, -5.48452, 15.736164, 20.516247, 5.48452, -15.736164, -20.516247, 22.73962, 19.606243, -14.309261, 17.045815, 1.9749422, 21.48943, -17.045815, -1.9749422, -21.48943, 93.77485, 40.93724, -82.72391, 14.219254, -27.564903, 29.73471, -14.219254, 27.564903, -29.73471, 30.867, 69.164, -113.226),
+"tilts": PackedFloat32Array(0.5061455, -0.28910136, -0.34568024, -0.74496263, 0.1468514, -0.9859015, 2.893865, 1.3389672, 0.8848819)
 }
 point_count = 9
 
@@ -73,12 +75,13 @@ JUMP_START_SLOW_DOWN = 0.1
 FALL_SPEED = 0.5
 FALL_GRAVITY = 40.0
 TRICK_TIME = 0.2
-TRICK_FORCE = 4.0
+TRICK_FORCE = 8.0
 TRICK_GRAVITY = 16.0
 TRICK_SLOW_DOWN = 0.1
+HIT_TROUGH_TIME = 1.0
 HIT_TROUGH_CLONES = 10
 HIT_TROUGH_DEBRIS_TIMER = 10
-GRINDING_MIN_SPEED = 20
+GRINDING_MIN_SPEED = 30
 GRINDING_ADDER = 10
 FAST_AIR_SLOW_DOWN = 0.1
 FAST_AIR_GRAVITY = 10.0
@@ -91,7 +94,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 575.9912, 196.60815, 427.7413
 [node name="RAILS" type="Node3D" parent="."]
 
 [node name="Path3D" type="Path3D" parent="RAILS"]
-transform = Transform3D(-0.992306, 0, 0.1238094, 0, 1, 0, -0.1238094, 0, -0.992306, 25.7531, 2.1349282, 57.011776)
+transform = Transform3D(-0.992306, 0, 0.1238094, 0, 1, 0, -0.1238094, 0, -0.992306, -9.559786, 2.1349282, 52.60581)
 curve = SubResource("Curve3D_qxrlw")
 script = ExtResource("3_3dryh")
 
@@ -101,5 +104,15 @@ current = true
 script = ExtResource("3_wrm1d")
 stalk_distance = 3
 track_object = NodePath("../Rabbit")
+
+[node name="RandomPowers" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 577.00446, 577.71924, 406.06754)
+visible = false
+script = ExtResource("5_wowpa")
+spawn_size = Vector3(1500, 1000, 1500)
+spawn_obj = ExtResource("6_i6g32")
+spawn_size_min = 1.0
+spawn_size_max = 1.0
+spawn_amount = 1000
 
 [editable path="Rabbit"]
