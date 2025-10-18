@@ -51,7 +51,7 @@ func _ready() -> void:
 			support_box.scale = Vector3(25, 1000, 25)
 			
 			# for e in range((follow_point.transform.basis.y * 20 + 50) / 20):
-			for e in range(ceil((follow_point.position.y + follow_point.transform.basis.y.y) / 20)):
+			for e in range(ceil((follow_point.position.y + 40) / 20)):
 				var base_support_box = MeshInstance3D.new()
 				base_support_box.mesh = copy_cube.mesh
 				base_support_box.material_override = copy_cube.material_override

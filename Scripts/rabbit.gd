@@ -340,11 +340,12 @@ func _physics_process(delta: float) -> void:
 			grind_position += delta * start_speed
 			rail_positioner.progress = grind_position
 			global_position = rail_positioner.global_position
+			velocity = rail_positioner.transform.basis.z * -start_speed
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
-				# velocity = rail_positioner.transform.basis.z * -start_speed
-				velocity = rail_positioner.transform.basis.x * start_speed
+				velocity = rail_positioner.transform.basis.z * -start_speed / 2
+				velocity.y += 30
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
@@ -359,6 +360,7 @@ func _physics_process(delta: float) -> void:
 				touching_rail = null
 				rail_positioner = null
 				curent_player_state = PLAYER_STATES.FALL
+		
 		
 		_:
 			curent_player_state = PLAYER_STATES.START_MOVE
