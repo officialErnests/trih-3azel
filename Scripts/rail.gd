@@ -4,6 +4,7 @@ extends Path3D
 @export var structure = 1
 @onready var follow_point = $Follo_point
 @onready var visual_boxes = $visual
+@onready var copy_cube = $Cube
 var collider = null
 var path_lenght = 0
 var can_detect = true
@@ -20,11 +21,11 @@ func _ready() -> void:
 	for i in range(ceil(path_lenght / segmen_leght)):
 		follow_point.progress = i * segmen_leght + segmen_leght / 2.0
 
-		var box_mesh = BoxMesh.new()
-		box_mesh.size = Vector3(0.25, 0.25, segmen_leght)
-
 		var visualiser_box = MeshInstance3D.new()
-		visualiser_box.mesh = box_mesh
+		visualiser_box.mesh = copy_cube.mesh
+		visualiser_box.scale = Vector3(100, 100, 100)
+		# visualiser_box.material_override = 
+		# visualiser_box.scale = Vector3(100, 100, segmen_leght * 1000)
 		visualiser_box.name = "vsBOX_" + str(i)
 		visualiser_box.transform = follow_point.transform
 

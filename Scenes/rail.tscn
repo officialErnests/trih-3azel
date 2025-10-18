@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dorwe6tyx2k5"]
+[gd_scene load_steps=5 format=3 uid="uid://dorwe6tyx2k5"]
 
 [ext_resource type="Script" uid="uid://bq5feu2xc3n2s" path="res://Scripts/rail.gd" id="1_6scoo"]
+[ext_resource type="Material" uid="uid://cjn6xeltanv7b" path="res://Assets/3D_Assets/rail.tres" id="2_3fs6a"]
 
 [sub_resource type="Curve3D" id="Curve3D_wxdfp"]
 up_vector_enabled = false
+
+[sub_resource type="BoxMesh" id="BoxMesh_3fs6a"]
 
 [node name="Rail_Path" type="Path3D"]
 curve = SubResource("Curve3D_wxdfp")
@@ -18,3 +21,7 @@ loop = false
 [node name="Area3D" type="Area3D" parent="Follo_point"]
 
 [node name="visual" type="Node3D" parent="."]
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_3fs6a")
+mesh = SubResource("BoxMesh_3fs6a")
