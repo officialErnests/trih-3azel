@@ -14,7 +14,6 @@ enum PLAYER_STATES {
 	TRICK,
 	HIT_TROUGH,
 	GRINDING,
-	
 	FAST_AIR,
 }
 
@@ -137,7 +136,7 @@ func _physics_process(delta: float) -> void:
 		direction = (default_transform * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		
 
-	if position.y < -100:
+	if position.y < -50:
 		velocity.y = 200
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
@@ -344,23 +343,23 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
-				velocity = rail_positioner.transform.basis.z * start_speed
-				velocity += rail_positioner.transform.basis.y * 100
+				# velocity = rail_positioner.transform.basis.z * -start_speed
+				velocity = rail_positioner.transform.basis.x * start_speed
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
-				curent_player_state = PLAYER_STATES.TRICK
+				curent_player_state = PLAYER_STATES.FALL
 
 
 			if rail_positioner.progress_ratio == 1:
 				# Switch states
-				velocity = rail_positioner.transform.basis.z * start_speed
+				velocity = rail_positioner.transform.basis.z * -start_speed
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
 				rail_positioner = null
 				curent_player_state = PLAYER_STATES.FALL
-
+		
 		_:
 			curent_player_state = PLAYER_STATES.START_MOVE
 	

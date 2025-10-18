@@ -46,9 +46,22 @@ func _ready() -> void:
 			support_box.material_override = copy_cube.material_override
 			support_box.name = "vsBOX_" + str(i)
 			support_box.transform = follow_point.transform
-			support_box.position -= follow_point.transform.basis.y * 10
+			support_box.position -= follow_point.transform.basis.y * 10.25
 			visual_boxes.add_child(support_box)
 			support_box.scale = Vector3(25, 1000, 25)
+			
+			# for e in range((follow_point.transform.basis.y * 20 + 50) / 20):
+			for e in range(ceil((follow_point.position.y + follow_point.transform.basis.y.y) / 20)):
+				var base_support_box = MeshInstance3D.new()
+				base_support_box.mesh = copy_cube.mesh
+				base_support_box.material_override = copy_cube.material_override
+				base_support_box.name = "vsBOX_" + str(i)
+				base_support_box.transform = follow_point.transform
+				base_support_box.position -= follow_point.transform.basis.y * 20
+				base_support_box.position.y -= 10 + 20 * e
+				base_support_box.rotation_degrees = Vector3(0, 0, 0)
+				visual_boxes.add_child(base_support_box)
+				base_support_box.scale = Vector3(25, 1000, 25)
 
 
 	collider.body_entered.connect(_on_rail_collision_body_entered)

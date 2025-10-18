@@ -10,4 +10,4 @@ func replace_rails():
 	var cloned_rail = rail.instantiate()
 	cloned_rail.curve = curve
 	get_parent().add_child(cloned_rail)
-	cloned_rail.global_position = global_position
+	cloned_rail.transform = transform
