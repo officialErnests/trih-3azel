@@ -77,6 +77,11 @@ enum PLAYER_STATES {
 @export_subgroup("GRINDING")
 @export var GRINDING_MIN_SPEED: int = 1
 @export var GRINDING_ADDER: int = 1
+#-FAST_AIR
+@export_subgroup("FAST_AIR")
+@export var FAST_AIR_SPEED: float = 1
+@export var FAST_AIR_SLOW_DOWN: float = 1
+@export var FAST_AIR_GRAVITY: float = 1
 
 # Internal variables
 #OTHERS
@@ -333,7 +338,7 @@ func _physics_process(delta: float) -> void:
 				grind_position = touching_rail.curve.get_closest_offset(touching_rail.to_local(global_position))
 				rail_positioner = touching_rail.get_node("Follo_point")
 				rail_positioner.v_offset = 0.5
-				start_speed = max(velocity.length(), GRINDING_MIN_SPEED)
+				start_speed = velocity.length() + GRINDING_MIN_SPEED
 
 			start_speed += GRINDING_ADDER * delta
 			rail_processing = true
@@ -344,12 +349,12 @@ func _physics_process(delta: float) -> void:
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
-				velocity = rail_positioner.transform.basis.z * -start_speed / 2
-				velocity.y += 30
+				velocity = rail_positioner.transform.basis.z * -start_speed
+				velocity.y += start_speed / 2
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
-				curent_player_state = PLAYER_STATES.FALL
+				curent_player_state = PLAYER_STATES.FAST_AIR
 
 
 			if rail_positioner.progress_ratio == 1:
@@ -359,9 +364,32 @@ func _physics_process(delta: float) -> void:
 				rail_processing = false
 				touching_rail = null
 				rail_positioner = null
-				curent_player_state = PLAYER_STATES.FALL
+				curent_player_state = PLAYER_STATES.FAST_AIR
 		
-		
+		PLAYER_STATES.FAST_AIR:
+			if direction:
+				add_velocity(delta, direction, FAST_AIR_SPEED)
+				multiplyVelocity2D(1 - (delta * FAST_AIR_SLOW_DOWN))
+
+			if Input.is_action_just_pressed("Jump"):
+				# Switch states
+				if direction:
+					var prev_velocity = velocity.length()
+					velocity.x = 0
+					velocity.z = 0
+					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
+				curent_player_state = PLAYER_STATES.JUMP_START
+			
+			if velocity.y <= 0:
+				if trick_time > 0:
+					trick_time -= delta
+				else:
+					# Switch states
+					curent_player_state = PLAYER_STATES.FALL
+			else:
+				velocity.y -= JUMP_START_GRAVITY * delta
+			railDetect()
+			move_and_slide()
 		_:
 			curent_player_state = PLAYER_STATES.START_MOVE
 	
