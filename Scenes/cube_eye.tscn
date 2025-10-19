@@ -1,10 +1,19 @@
-[gd_scene load_steps=6 format=4 uid="uid://b8agkogfme660"]
+[gd_scene load_steps=8 format=4 uid="uid://b8agkogfme660"]
 
 [ext_resource type="Script" uid="uid://dy07pys7rtvsb" path="res://Scripts/look_atPlayer.gd" id="1_de8si"]
-[ext_resource type="Texture2D" uid="uid://c5v1hto2whmke" path="res://Assets/Tile_1/Tile_1.png" id="1_pit0n"]
+[ext_resource type="Texture2D" uid="uid://dkxhwxyv8jhlq" path="res://Assets/TRUE_ASSETS/TRUE_EYE.png" id="2_de8si"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m1ekr"]
+cull_mode = 1
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_oqt4n"]
+radius = 2.0
+height = 4.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_de8si"]
-albedo_texture = ExtResource("1_pit0n")
+albedo_texture = ExtResource("2_de8si")
 texture_filter = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_x0uvj"]
@@ -28,13 +37,18 @@ data = PackedVector3Array(-0.01, 0.01, 0.01, -0.01, -0.01, 0.01, -0.01, -0.01, -
 [node name="Cube" type="Node3D"]
 script = ExtResource("1_de8si")
 
-[node name="Cube" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_m1ekr")
+mesh = SubResource("SphereMesh_oqt4n")
+skeleton = NodePath("../CubeMesh")
+
+[node name="CubeMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_de8si")
 mesh = SubResource("ArrayMesh_x0uvj")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Cube"]
+[node name="StaticBody3D" type="StaticBody3D" parent="CubeMesh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CubeMesh/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_y1j0v")

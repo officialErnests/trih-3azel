@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=4 uid="uid://clq1xjp614hft"]
+[gd_scene load_steps=13 format=4 uid="uid://clq1xjp614hft"]
 
-[ext_resource type="Texture2D" uid="uid://c263vgsro6sus" path="res://Assets/Tile_1/WEAK_POINT.png" id="1_c0upd"]
 [ext_resource type="Script" uid="uid://nx7f8e0nem3d" path="res://Scripts/blast_trough.gd" id="1_k0s8m"]
+[ext_resource type="Texture2D" uid="uid://bkgfuwnfmvlqp" path="res://Assets/TRUE_ASSETS/EYES.png" id="2_k0s8m"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k0s8m"]
 bounce = 1.0
@@ -11,10 +11,31 @@ absorbent = true
 size = Vector3(2, 2, 2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k0s8m"]
-albedo_texture = ExtResource("1_c0upd")
+cull_mode = 1
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+grow_amount = -1.238
+distance_fade_min_distance = 10.0
+distance_fade_max_distance = 20.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_k0s8m"]
+size = Vector3(2.1, 2.1, 2.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_udsyh"]
+cull_mode = 1
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+grow_amount = -1.238
+distance_fade_mode = 3
+distance_fade_min_distance = 20.0
+distance_fade_max_distance = 50.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_n6dbu"]
+size = Vector3(3, 3, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n6dbu"]
+albedo_texture = ExtResource("2_k0s8m")
 texture_filter = 0
-distance_fade_mode = 2
-distance_fade_max_distance = 5.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1woie"]
 resource_name = "Material.001"
@@ -67,9 +88,21 @@ script = ExtResource("1_k0s8m")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_c0upd")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_k0s8m")
+mesh = SubResource("BoxMesh_k0s8m")
+skeleton = NodePath("../Cube")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_udsyh")
+mesh = SubResource("BoxMesh_n6dbu")
+skeleton = NodePath("../Cube")
+
 [node name="Cube" type="MeshInstance3D" parent="."]
 transform = Transform3D(100, 0, 0, 0, -4.371139e-06, 100, 0, -100, -4.371139e-06, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_k0s8m")
+material_override = SubResource("StandardMaterial3D_n6dbu")
 mesh = SubResource("ArrayMesh_x0uvj")
 skeleton = NodePath("")
 

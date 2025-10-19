@@ -63,7 +63,7 @@ func _ready() -> void:
 				visual_boxes.add_child(base_support_box)
 				base_support_box.scale = Vector3(25, 1000, 25)
 
-
+	copy_cube.queue_free()
 	collider.body_entered.connect(_on_rail_collision_body_entered)
 
 func debounce():
