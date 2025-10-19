@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=45 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://dhu0nc830pmuc" path="res://Scripts/start_animation.gd" id="9_rku1e"]
 [ext_resource type="Texture2D" uid="uid://di5r1vslig4ce" path="res://Assets/TRUE_ASSETS/EFFECT.png" id="11_rfjv2"]
 [ext_resource type="Texture2D" uid="uid://dnbkvj2sd6f22" path="res://Assets/TRUE_ASSETS/ACTION_LINES.png" id="12_1phco"]
+[ext_resource type="AudioStream" uid="uid://k0veqk6x4ktw" path="res://ThisIsMusicUShouldDance/C5S4LK.mp3" id="13_nb51f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -412,6 +413,10 @@ position = Vector2(64, 48)
 sprite_frames = SubResource("SpriteFrames_exi56")
 frame_progress = 0.47716442
 script = ExtResource("9_rku1e")
+
+[node name="C5s4lk" type="AudioStreamPlayer" parent="Camera3D"]
+stream = ExtResource("13_nb51f")
+autoplay = true
 
 [node name="RandomPowers" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 577.00446, 577.71924, 406.06754)

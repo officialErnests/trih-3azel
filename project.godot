@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="TRIH3AZEL"
-run/main_scene="uid://bvpg7msplbdp5"
+run/main_scene="uid://dnus5g7rwsm71"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/use_filter=false
 boot_splash/image="uid://buf5npuofv3cu"
 config/icon="uid://dbodppgwi0u4t"
 
@@ -37,7 +38,8 @@ enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 folder_colors={
 "res://Assets/": "yellow",
 "res://Scenes/": "red",
-"res://Scripts/": "orange"
+"res://Scripts/": "orange",
+"res://ThisIsMusicUShouldDance/": "teal"
 }
 
 [global_group]
