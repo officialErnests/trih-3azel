@@ -5,11 +5,10 @@
 
 [sub_resource type="Curve3D" id="Curve3D_wxdfp"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.223549, 3.1206446, 6.064715, 0, 0, 0, 0, 0, 0, -4.737835, 4.4256015, 10.493297),
-"tilts": PackedFloat32Array(0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.223549, 3.1206446, 6.064715, 1.8133678, -1.1557255, 4.690173, -1.8133678, 1.1557255, -4.690173, -5.111825, 7.4108715, 6.6922235, -0.035148144, -2.3363051, -1.2984056, 0.035148144, 2.3363051, 1.2984056, -5.9384093, 4.3136344, 8.134952, -0.77478266, 0.16628504, 3.2454085, 0.77478266, -0.16628504, -3.2454085, -5.212126, 7.556187, 7.188716, 0, 0, 0, 0, 0, 0, -5.003283, 5.5607743, 5.1108365),
+"tilts": PackedFloat32Array(0, -1.546198, 1.8429998, -2.8956392, 2.01615)
 }
-point_count = 2
-up_vector_enabled = false
+point_count = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1woie"]
 resource_name = "Material.001"
@@ -41,7 +40,9 @@ debug_custom_color = Color(1, 0, 0, 1)
 script = ExtResource("1_6scoo")
 
 [node name="Follo_point" type="PathFollow3D" parent="."]
-transform = Transform3D(0.8696127, 0.122553885, -0.47826546, 3.725253e-09, 0.96869063, 0.24822791, 0.4937145, -0.21586242, 0.8424012, -2.223549, 3.1206446, 6.064715)
+transform = Transform3D(-0.70870274, -0.6588154, -0.2523665, 0.5221239, -0.24922812, -0.8156529, 0.47446197, -0.70980674, 0.5206298, -5.0032835, 5.560775, 5.110836)
+progress = 24.26816
+rotation_mode = 4
 use_model_front = true
 loop = false
 

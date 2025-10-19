@@ -115,6 +115,7 @@ var hit_trough_objects = []
 var grind_position = 0
 var rail_positioner = null
 var start_speed = 0
+@onready var grinf_eff = $Grind_Eff
 
 func _init() -> void:
 	Global.player = self
@@ -154,8 +155,8 @@ func _physics_process(delta: float) -> void:
 	blasstrough_processing = false
 	rail_processing = false
 
-	FAST.scale = Vector2.ONE * 0.9 + Vector2.ONE * velocity.length() / 1000
-	BOOST.scale = Vector2.ONE * velocity.length() / 100
+	FAST.scale = Vector2.ONE * 0.9 + Vector2.ONE * velocity.length() / 500
+	BOOST.scale = Vector2.ONE * velocity.length() / 100 + Vector2.ONE
 
 	match curent_player_state:
 		PLAYER_STATES.STILL:
@@ -181,6 +182,7 @@ func _physics_process(delta: float) -> void:
 			start_move -= delta
 			
 			if direction:
+				FAST.visible = true
 				add_floor_velocity(delta, direction, START_MOVE_SPEED)
 				multiplyVelocity2D(1 - (delta * (1.0 - (max(start_move, 0) / START_MOVE_TIME * 1.1)) * START_MOVE_SLOW_DOWN))
 				if Input.is_action_just_pressed("Jump"):
@@ -191,6 +193,7 @@ func _physics_process(delta: float) -> void:
 					# Switch states
 					curent_player_state = PLAYER_STATES.FAST_RUN
 			else:
+				FAST.visible = false
 				multiplyVelocity2D(1 - (delta * max(start_move / START_MOVE_TIME + 1, 1) * START_MOVE_FAST_SLOW_DOWN))
 				if Input.is_action_just_pressed("Jump"):
 					curent_player_state = PLAYER_STATES.TRICK
@@ -205,7 +208,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.FAST_RUN:
-			FAST.visible = true
+			FAST.visible = false
 			emotions.frame = 2
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
@@ -253,7 +256,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.RUNNING:
-			FAST.visible = true
+			FAST.visible = false
 			emotions.frame = 3
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
@@ -272,6 +275,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.JUMP_START:
+			FAST.visible = false
 			emotions.frame = 1
 			if switch_state:
 				velocity.y = JUMP_START_FORCE
@@ -288,6 +292,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		
 		PLAYER_STATES.FALL:
+			FAST.visible = false
 			emotions.frame = 1
 			velocity.y -= FALL_GRAVITY * delta
 			if direction:
@@ -368,6 +373,7 @@ func _physics_process(delta: float) -> void:
 			BOOST.visible = true
 			emotions.frame = 3
 			if switch_state:
+				grinf_eff.visible = true
 				grind_position = touching_rail.curve.get_closest_offset(touching_rail.to_local(global_position))
 				rail_positioner = touching_rail.get_node("Follo_point")
 				rail_positioner.v_offset = 0.5
@@ -379,9 +385,12 @@ func _physics_process(delta: float) -> void:
 			rail_positioner.progress = grind_position
 			global_position = rail_positioner.global_position
 			velocity = rail_positioner.transform.basis.z * -start_speed
+			grinf_eff.rotation = Vector3(rail_positioner.rotation.z, rail_positioner.rotation.y, rail_positioner.rotation.x)
+			grinf_eff.scale = Vector3.ONE * start_speed / 2
 			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
+				grinf_eff.visible = false
 				velocity = rail_positioner.transform.basis.z * -start_speed
 				velocity.y += start_speed / 2
 				touching_rail.debounce()
@@ -392,6 +401,7 @@ func _physics_process(delta: float) -> void:
 
 			if rail_positioner.progress_ratio == 1:
 				# Switch states
+				grinf_eff.visible = false
 				velocity = rail_positioner.transform.basis.z * -start_speed
 				touching_rail.debounce()
 				rail_processing = false
