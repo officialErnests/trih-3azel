@@ -23,48 +23,57 @@ shape = SubResource("ConcavePolygonShape3D_4he8f")
 [node name="EYES" type="Node3D" parent="."]
 
 [node name="GenObjects" parent="EYES" instance=ExtResource("3_gtx68")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 995.5838, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1361.0647, 0)
 visible = false
 spawn_size = Vector3(2000, 200, 2000)
+spawn_obj = ExtResource("3_4he8f")
+spawn_size_min = 100.0
+spawn_size_max = 200.0
+spawn_amount = 3
+
+[node name="GenObjects2" parent="EYES" instance=ExtResource("3_gtx68")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 430.5393, 0)
+visible = false
+spawn_size = Vector3(2000, 400, 2000)
 spawn_obj = ExtResource("3_4he8f")
 spawn_size_min = 10.0
 spawn_size_max = 20.0
 spawn_amount = 10
 
 [node name="GenObjects5" parent="EYES" instance=ExtResource("3_gtx68")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1379.4889, 373.96252, 45.305664)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1527.0321, 373.96252, 45.305656)
 visible = false
-spawn_size = Vector3(2000, 500, 300)
+spawn_size = Vector3(2000, 500, 500)
 spawn_obj = ExtResource("3_4he8f")
 spawn_size_min = 50.0
 spawn_size_max = 100.0
-spawn_amount = 10
+spawn_amount = 5
 
 [node name="GenObjects6" parent="EYES" instance=ExtResource("3_gtx68")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1584.1759, 437.0823, 45.305794)
 visible = false
-spawn_size = Vector3(2000, 500, 300)
+spawn_size = Vector3(2000, 500, 500)
 spawn_obj = ExtResource("3_4he8f")
-spawn_size_min = 100.0
-spawn_size_max = 200.0
-spawn_amount = 2
+spawn_size_min = 50.0
+spawn_size_max = 100.0
+spawn_amount = 5
 
 [node name="GenObjects7" parent="EYES" instance=ExtResource("3_gtx68")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.41101, 437.0823, -1442.116)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.41101, 437.0823, -1686.2036)
 visible = false
-spawn_size = Vector3(2000, 500, 300)
+spawn_size = Vector3(2000, 500, 500)
 spawn_obj = ExtResource("3_4he8f")
-spawn_size_min = 100.0
-spawn_size_max = 200.0
-spawn_amount = 2
+spawn_size_min = 50.0
+spawn_size_max = 100.0
+spawn_amount = 5
 
 [node name="GenObjects8" parent="EYES" instance=ExtResource("3_gtx68")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.507446, 437.0823, 1741.4489)
 visible = false
-spawn_size = Vector3(2000, 500, 300)
+spawn_size = Vector3(2000, 500, 500)
 spawn_obj = ExtResource("3_4he8f")
-spawn_size_min = 100.0
-spawn_size_max = 200.0
-spawn_amount = 2
+spawn_size_min = 50.0
+spawn_size_max = 100.0
+spawn_amount = 5
 
 [editable path="Island_MAIN"]

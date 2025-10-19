@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvpg7msplbdp5"]
+
+[ext_resource type="Script" uid="uid://dedkoaocsskni" path="res://Scripts/warning.gd" id="1_k7nv6"]
+[ext_resource type="Texture2D" uid="uid://buf5npuofv3cu" path="res://Assets/TRUE_ASSETS/LOGO_TEXT_ASPECT4_3.png" id="1_osvl0"]
+
+[node name="WARNING" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k7nv6")
+
+[node name="LogoTextAspect43" type="Sprite2D" parent="."]
+modulate = Color(0.40069774, 0.40069774, 0.40069768, 1)
+position = Vector2(63.999996, 49)
+scale = Vector2(0.315, 0.315)
+texture = ExtResource("1_osvl0")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 12.0
+offset_right = 112.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+theme_override_font_sizes/font_size = 16
+text = "[WARNINGS]
+THIS GAME INCLUDE EXTREME
+MOTION SICKNES
+FLASHING LIGHTS
+BE WARNED >:))
+[SPACE]"
+horizontal_alignment = 1
+vertical_alignment = 1

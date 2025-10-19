@@ -19,11 +19,11 @@ func _process(delta: float) -> void:
 			nb_global_position.y += (track_position.y - nb_global_position.y + hit_trough_timer) * delta
 			global_position = nb_global_position
 		_:
-			velocity += (track_object.velocity.length() - velocity) * delta / 2
+			velocity += (track_object.velocity.length() - velocity) * delta
 			fov = min(170, max(75, track_object.velocity.length() + 75 - velocity / 3))
 			var track_position = track_object.global_position + Vector3.UP
 			look_at(avg_pos + Vector3.UP)
-			nb_global_position += (track_position - nb_global_position) * delta * min(max(nb_global_position.distance_to(track_position) - stalk_distance, -1), 1) * 4
+			nb_global_position += (track_position - nb_global_position) * delta * min(max(nb_global_position.distance_to(track_position) - stalk_distance, -1), 1) * 10
 			if track_object.is_on_floor():
 				nb_global_position.y += (track_position.y - nb_global_position.y - 0.5) * delta
 			else:

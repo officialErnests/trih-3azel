@@ -146,7 +146,7 @@ func _physics_process(delta: float) -> void:
 		
 
 	if position.y < -50:
-		velocity.y = 200
+		velocity.y = 100
 		curent_player_state = PLAYER_STATES.FAST_AIR
 	var switch_state = curent_player_state != prev_player_state
 	prev_player_state = curent_player_state
