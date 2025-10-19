@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://oburg5cipq6d" path="res://Assets/TRUE_ASSETS/RAILS.png" id="1_qyfhv"]
 
 [resource]
+shading_mode = 0
 albedo_texture = ExtResource("1_qyfhv")
 uv1_triplanar_sharpness = 0.002135544
 texture_filter = 0

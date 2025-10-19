@@ -1,26 +1,71 @@
-[gd_scene load_steps=5 format=3 uid="uid://ca3vfexx3chtr"]
+[gd_scene load_steps=14 format=3 uid="uid://ca3vfexx3chtr"]
 
 [ext_resource type="Script" uid="uid://rvui52ia7vmg" path="res://Scripts/rabbit.gd" id="1_i4mnj"]
+[ext_resource type="Texture2D" uid="uid://dlsvgwv0oycmf" path="res://Assets/TRUE_ASSETS/LOGO_TRANSPARENT.png" id="2_78qo1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rtlo7"]
 radius = 0.25
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tfrfv"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_78qo1")
+texture_filter = 0
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_78qo1"]
+size = Vector2(0.5, 0.5)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_78qo1"]
+cull_mode = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tfrfv"]
+radius = 0.3
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_axa3s"]
+cull_mode = 1
+shading_mode = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_8nxve"]
+radius = 0.35
+height = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8yopd"]
+transparency = 1
+cull_mode = 1
+depth_test = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 1, 0.4627451)
 distance_fade_mode = 2
-distance_fade_min_distance = 1.0
-distance_fade_max_distance = 3.0
+distance_fade_min_distance = 70.0
+distance_fade_max_distance = 100.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_78qo1"]
-material = SubResource("StandardMaterial3D_78qo1")
-radius = 0.25
-height = 0.5
+[sub_resource type="SphereMesh" id="SphereMesh_rynwb"]
+radius = 64.0
+height = 128.0
 
-[node name="Rabbit" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction_node") groups=["Player"]]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8nxve"]
+transparency = 1
+cull_mode = 1
+depth_test = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 0, 0.5137255)
+distance_fade_mode = 2
+distance_fade_min_distance = 30.0
+distance_fade_max_distance = 50.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_8yopd"]
+radius = 16.0
+height = 32.0
+
+[node name="Rabbit" type="CharacterBody3D" groups=["Player"]]
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 script = ExtResource("1_i4mnj")
-movement_direction_node = NodePath("")
 STILL_SPEED = 20.0
 START_MOVE_SPEED = 0.8
 START_MOVE_FAST_SLOW_DOWN = 4.0
@@ -44,6 +89,23 @@ HIT_TROUGH_SPEED_MUL = 2.0
 shape = SubResource("SphereShape3D_rtlo7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_78qo1")
+material_override = SubResource("StandardMaterial3D_tfrfv")
+mesh = SubResource("QuadMesh_78qo1")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_78qo1")
+mesh = SubResource("SphereMesh_tfrfv")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_axa3s")
+mesh = SubResource("SphereMesh_8nxve")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_8yopd")
+mesh = SubResource("SphereMesh_rynwb")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_8nxve")
+mesh = SubResource("SphereMesh_8yopd")

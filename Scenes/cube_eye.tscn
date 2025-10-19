@@ -1,20 +1,30 @@
-[gd_scene load_steps=8 format=4 uid="uid://b8agkogfme660"]
+[gd_scene load_steps=11 format=4 uid="uid://b8agkogfme660"]
 
 [ext_resource type="Script" uid="uid://dy07pys7rtvsb" path="res://Scripts/look_atPlayer.gd" id="1_de8si"]
 [ext_resource type="Texture2D" uid="uid://dkxhwxyv8jhlq" path="res://Assets/TRUE_ASSETS/TRUE_EYE.png" id="2_de8si"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m1ekr"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oqt4n"]
 cull_mode = 1
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_oqt4n"]
-radius = 2.0
-height = 4.0
+[sub_resource type="SphereMesh" id="SphereMesh_xrv22"]
+radius = 1.0
+height = 10.0
+radial_segments = 4
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_de8si"]
+radius = 1.0
+height = 10.0
+radial_segments = 4
+rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_de8si"]
+shading_mode = 0
 albedo_texture = ExtResource("2_de8si")
 texture_filter = 0
+billboard_keep_scale = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_x0uvj"]
 _surfaces = [{
@@ -34,12 +44,26 @@ blend_shape_mode = 0
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_y1j0v"]
 data = PackedVector3Array(-0.01, 0.01, 0.01, -0.01, -0.01, 0.01, -0.01, -0.01, -0.01, -0.01, -0.01, -0.01, -0.01, 0.01, -0.01, -0.01, 0.01, 0.01, 0.01, 0.01, 0.01, -0.01, 0.01, 0.01, -0.01, 0.01, -0.01, -0.01, 0.01, -0.01, 0.01, 0.01, -0.01, 0.01, 0.01, 0.01, 0.01, -0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, -0.01, 0.01, 0.01, -0.01, 0.01, -0.01, -0.01, 0.01, -0.01, 0.01, -0.01, -0.01, 0.01, 0.01, -0.01, 0.01, 0.01, -0.01, -0.01, 0.01, -0.01, -0.01, -0.01, -0.01, -0.01, -0.01, -0.01, 0.01, 0.01, -0.01, -0.01, 0.01, 0.01, -0.01, -0.01, 0.01, -0.01, -0.01, 0.01, -0.01, -0.01, -0.01, -0.01, 0.01, -0.01, -0.01, -0.01, -0.01, 0.01, -0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, -0.01, 0.01, -0.01, -0.01, 0.01)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m1ekr"]
+cull_mode = 1
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_de8si"]
+size = Vector3(2.1, 2.1, 2.1)
+
 [node name="Cube" type="Node3D"]
 script = ExtResource("1_de8si")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_m1ekr")
-mesh = SubResource("SphereMesh_oqt4n")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_oqt4n")
+mesh = SubResource("SphereMesh_xrv22")
+skeleton = NodePath("../CubeMesh")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_oqt4n")
+mesh = SubResource("SphereMesh_de8si")
 skeleton = NodePath("../CubeMesh")
 
 [node name="CubeMesh" type="MeshInstance3D" parent="."]
@@ -52,3 +76,8 @@ skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CubeMesh/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_y1j0v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CubeMesh"]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_m1ekr")
+mesh = SubResource("BoxMesh_de8si")

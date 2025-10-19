@@ -3,5 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://dgkr24cs8a3u" path="res://Assets/TRUE_ASSETS/FLOOR.png" id="1_beie4"]
 
 [resource]
+shading_mode = 0
 albedo_texture = ExtResource("1_beie4")
 texture_filter = 0
