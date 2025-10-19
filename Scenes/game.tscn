@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=36 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://bpw5vi2d5ldux" path="res://Assets/TRUE_ASSETS/FRAMES.png" id="8_ldgsr"]
 [ext_resource type="Texture2D" uid="uid://b2g87q6hjqhbl" path="res://Assets/TRUE_ASSETS/BUNNY_PIC.png" id="8_o5yvi"]
 [ext_resource type="Script" uid="uid://dhu0nc830pmuc" path="res://Scripts/start_animation.gd" id="9_rku1e"]
+[ext_resource type="Texture2D" uid="uid://di5r1vslig4ce" path="res://Assets/TRUE_ASSETS/EFFECT.png" id="11_rfjv2"]
+[ext_resource type="Texture2D" uid="uid://dnbkvj2sd6f22" path="res://Assets/TRUE_ASSETS/ACTION_LINES.png" id="12_1phco"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -117,6 +119,64 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_85qyi"]
+atlas = ExtResource("11_rfjv2")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iivbl"]
+atlas = ExtResource("11_rfjv2")
+region = Rect2(0, 96, 128, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nbq1"]
+atlas = ExtResource("11_rfjv2")
+region = Rect2(0, 192, 128, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7t8sx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85qyi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iivbl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7nbq1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 11.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exi56"]
+atlas = ExtResource("12_1phco")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7t8sx"]
+atlas = ExtResource("12_1phco")
+region = Rect2(0, 96, 128, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mg4q0"]
+atlas = ExtResource("12_1phco")
+region = Rect2(0, 192, 128, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_exi56"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exi56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7t8sx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mg4q0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 13.0
+}]
+
 [node name="Game" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -128,9 +188,12 @@ visible = false
 light_energy = 0.08
 light_specular = 0.0
 
-[node name="Rabbit" parent="." node_paths=PackedStringArray("movement_direction_node") instance=ExtResource("1_ebmjs")]
+[node name="Rabbit" parent="." node_paths=PackedStringArray("movement_direction_node", "emotions", "FAST", "BOOST") instance=ExtResource("1_ebmjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 movement_direction_node = NodePath("../Camera3D")
+emotions = NodePath("../Camera3D/Rabbit_face/Holder/faces")
+FAST = NodePath("../Camera3D/SPEED/Fast")
+BOOST = NodePath("../Camera3D/SPEED/BOOST")
 START_MOVE_TIME = 2.0
 START_MOVE_SPEED = 1.0
 START_MOVE_FAST_SLOW_DOWN = 1.0
@@ -178,7 +241,7 @@ stalk_distance = 3
 track_object = NodePath("../Rabbit")
 
 [node name="GUI" type="CanvasLayer" parent="Camera3D"]
-layer = 2
+layer = 3
 script = ExtResource("5_h4fw4")
 
 [node name="TextShadow" type="Sprite2D" parent="Camera3D/GUI"]
@@ -211,6 +274,7 @@ scale = Vector2(0.21, 0.21)
 texture = ExtResource("8_h4fw4")
 
 [node name="Rabbit_face" type="CanvasLayer" parent="Camera3D"]
+layer = 2
 
 [node name="Holder" type="Node2D" parent="Camera3D/Rabbit_face"]
 position = Vector2(16, 80)
@@ -218,7 +282,7 @@ scale = Vector2(0.25, 0.25)
 
 [node name="Frame" type="AnimatedSprite2D" parent="Camera3D/Rabbit_face/Holder"]
 sprite_frames = SubResource("SpriteFrames_1phco")
-frame_progress = 0.9048364
+frame_progress = 0.44265053
 script = ExtResource("9_rku1e")
 
 [node name="faces" type="AnimatedSprite2D" parent="Camera3D/Rabbit_face/Holder"]
@@ -226,6 +290,20 @@ rotation = -0.3822271
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_85qyi")
 frame = 1
+
+[node name="SPEED" type="CanvasLayer" parent="Camera3D"]
+
+[node name="Fast" type="AnimatedSprite2D" parent="Camera3D/SPEED"]
+position = Vector2(64, 48)
+sprite_frames = SubResource("SpriteFrames_7t8sx")
+frame_progress = 0.8987447
+script = ExtResource("9_rku1e")
+
+[node name="BOOST" type="AnimatedSprite2D" parent="Camera3D/SPEED"]
+position = Vector2(64, 48)
+sprite_frames = SubResource("SpriteFrames_exi56")
+frame_progress = 0.09487323
+script = ExtResource("9_rku1e")
 
 [node name="RandomPowers" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 577.00446, 577.71924, 406.06754)

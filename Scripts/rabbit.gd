@@ -20,7 +20,9 @@ enum PLAYER_STATES {
 #OTHERS
 @export_category("Others")
 @export var movement_direction_node: Node3D = Node3D.new()
-
+@export var emotions: AnimatedSprite2D
+@export var FAST: AnimatedSprite2D
+@export var BOOST: AnimatedSprite2D
 
 #SETUP
 @export_category("Movement")
@@ -151,8 +153,15 @@ func _physics_process(delta: float) -> void:
 	#Processes player states
 	blasstrough_processing = false
 	rail_processing = false
+
+	FAST.scale = Vector2.ONE * 0.9 + Vector2.ONE * velocity.length() / 1000
+	BOOST.scale = Vector2.ONE * velocity.length() / 100
+
 	match curent_player_state:
 		PLAYER_STATES.STILL:
+			BOOST.visible = false
+			FAST.visible = false
+			emotions.frame = 1
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
 				curent_player_state = PLAYER_STATES.JUMP_START
@@ -165,6 +174,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		
 		PLAYER_STATES.START_MOVE:
+			emotions.frame = 1
 			if switch_state:
 				start_move = START_MOVE_TIME
 
@@ -195,6 +205,8 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.FAST_RUN:
+			FAST.visible = true
+			emotions.frame = 2
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
@@ -212,6 +224,9 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		
 		PLAYER_STATES.QUICK_STOP:
+			BOOST.visible = false
+			FAST.visible = true
+			emotions.frame = 0
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if switch_state:
@@ -238,6 +253,8 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.RUNNING:
+			FAST.visible = true
+			emotions.frame = 3
 			if !is_on_floor():
 				curent_player_state = PLAYER_STATES.FALL
 			if direction:
@@ -255,6 +272,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.JUMP_START:
+			emotions.frame = 1
 			if switch_state:
 				velocity.y = JUMP_START_FORCE
 			if direction:
@@ -270,6 +288,7 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		
 		PLAYER_STATES.FALL:
+			emotions.frame = 1
 			velocity.y -= FALL_GRAVITY * delta
 			if direction:
 				add_velocity(delta, direction, FALL_SPEED)
@@ -280,6 +299,8 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.TRICK:
+			FAST.visible = true
+			emotions.frame = 0
 			if switch_state:
 				trick_time = TRICK_TIME
 				velocity.y = TRICK_FORCE
@@ -309,6 +330,9 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 		PLAYER_STATES.HIT_TROUGH:
+			FAST.visible = true
+			BOOST.visible = true
+			emotions.frame = 0
 			blasstrough_processing = true
 			if switch_state:
 				hit_trough_timer = 0
@@ -340,6 +364,9 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.RUNNING
 
 		PLAYER_STATES.GRINDING:
+			FAST.visible = true
+			BOOST.visible = true
+			emotions.frame = 3
 			if switch_state:
 				grind_position = touching_rail.curve.get_closest_offset(touching_rail.to_local(global_position))
 				rail_positioner = touching_rail.get_node("Follo_point")
@@ -373,6 +400,9 @@ func _physics_process(delta: float) -> void:
 				curent_player_state = PLAYER_STATES.FAST_AIR
 		
 		PLAYER_STATES.FAST_AIR:
+			FAST.visible = true
+			BOOST.visible = true
+			emotions.frame = 0
 			if direction:
 				add_velocity(delta, direction, FAST_AIR_SPEED)
 				multiplyVelocity2D(1 - (delta * FAST_AIR_SLOW_DOWN))
