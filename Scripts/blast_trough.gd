@@ -20,6 +20,7 @@ func _process(delta: float) -> void:
 		if delete_timer <= 0:
 			queue_free()
 			return
-func _on_body_entered(body: Node) -> void:
+
+func _on_area_3d_body_entered(body: Node3D) -> void:
 	if !has_been_hit and body.is_in_group("Player") and body.blasstrough == null:
 		body.blasstrough = self

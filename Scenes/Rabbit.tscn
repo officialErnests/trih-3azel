@@ -159,16 +159,16 @@ mesh = SubResource("QuadMesh_78qo1")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 
-[node name="AHHHHHH" type="RayCast3D" parent="."]
-debug_shape_custom_color = Color(1, 0, 0, 1)
+[node name="AHHHH" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(0, 1, 0, 1)
 debug_shape_thickness = 5
 
-[node name="AHHHHHH2" type="RayCast3D" parent="."]
-debug_shape_custom_color = Color(1, 0, 0, 1)
+[node name="AHHHH2" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(0, 1, 0, 1)
 debug_shape_thickness = 5
 
-[node name="AHHHHHH3" type="RayCast3D" parent="."]
-debug_shape_custom_color = Color(1, 0, 0, 1)
+[node name="AHHHH3" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(0, 1, 0, 1)
 debug_shape_thickness = 5
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
@@ -196,7 +196,7 @@ cast_shadow = 0
 offset = Vector2(-64, 48)
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_rynwb")
-frame_progress = 0.1552584
+frame_progress = 0.70270044
 script = ExtResource("4_axa3s")
 
 [node name="AnimatedSprite3D2" type="AnimatedSprite3D" parent="Grind_Eff"]

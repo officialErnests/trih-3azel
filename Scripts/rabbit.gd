@@ -379,21 +379,22 @@ func _physics_process(delta: float) -> void:
 				rail_positioner.v_offset = 0.5
 				start_speed = velocity.length() + GRINDING_MIN_SPEED
 
+			var ze_basis = rail_positioner.transform.basis
+			# var ze_basis = rail_positioner.transform.basis.rotated(rail_positioner.transform.basis.z, rail_positioner.transform.basis.get_euler().z * -2)
 			start_speed += GRINDING_ADDER * delta
 			rail_processing = true
 			grind_position += delta * start_speed
 			rail_positioner.progress = grind_position
 			global_position = rail_positioner.global_position
-			velocity = rail_positioner.transform.basis.z * -start_speed
-			grinf_eff.rotation = Vector3(rail_positioner.rotation.z, rail_positioner.rotation.y, rail_positioner.rotation.x)
+			velocity = ze_basis.z * start_speed
+			grinf_eff.rotation = ze_basis.z
 			grinf_eff.scale = Vector3.ONE * start_speed / 200
-			$AHHHHHH3.target_position = rail_positioner.transform.basis.rotated(rail_positioner.transform.basis.z, -PI / 2).z * 10
-			
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
 				grinf_eff.visible = false
-				velocity = rail_positioner.transform.basis.z * -start_speed
-				velocity.y += start_speed / 2
+				velocity = ze_basis.z * start_speed
+				velocity += ze_basis.y * 20
+				# velocity += ze_basis.y 
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
@@ -403,7 +404,8 @@ func _physics_process(delta: float) -> void:
 			if rail_positioner.progress_ratio == 1:
 				# Switch states
 				grinf_eff.visible = false
-				velocity = rail_positioner.transform.basis.z * -start_speed
+				velocity = ze_basis.z * start_speed
+				velocity += ze_basis.y * 10
 				touching_rail.debounce()
 				rail_processing = false
 				touching_rail = null
@@ -427,14 +429,9 @@ func _physics_process(delta: float) -> void:
 					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
 				curent_player_state = PLAYER_STATES.JUMP_START
 			
-			if velocity.y <= 0:
-				if trick_time > 0:
-					trick_time -= delta
-				else:
-					# Switch states
-					curent_player_state = PLAYER_STATES.FALL
-			else:
-				velocity.y -= JUMP_START_GRAVITY * delta
+			velocity.y -= JUMP_START_GRAVITY * delta
+			if is_on_floor():
+				curent_player_state = PLAYER_STATES.START_MOVE
 			blastTroughDetect()
 			railDetect()
 			move_and_slide()

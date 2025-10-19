@@ -17,6 +17,7 @@ var show_box = null
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if !Engine.is_editor_hint():
+		visible = true
 		for x in range(spawn_amount):
 			var instance = spawn_obj.instantiate()
 			instance.position = Vector3(randf_range(spawn_size.x / -2, spawn_size.x / 2),

@@ -21,14 +21,15 @@ func _ready() -> void:
 	for i in range(ceil(path_lenght / segmen_leght)):
 		follow_point.progress = i * segmen_leght + segmen_leght / 2.0
 
-		var visualiser_box = MeshInstance3D.new()
-		visualiser_box.mesh = copy_cube.mesh
-		visualiser_box.material_override = copy_cube.material_override
+		# var visualiser_box = MeshInstance3D.new()
+		# visualiser_box.mesh = copy_cube.mesh
+		# visualiser_box.material_override = copy_cube.material_override
+		var visualiser_box = copy_cube.duplicate()
 		visualiser_box.name = "vsBOX_" + str(i)
 		visualiser_box.transform = follow_point.transform
 
 		var box_collider = BoxShape3D.new()
-		box_collider.size = Vector3(2, 2, segmen_leght)
+		box_collider.size = Vector3(2, 4, segmen_leght)
 
 		var collision_box = CollisionShape3D.new()
 		collision_box.shape = box_collider
@@ -40,7 +41,7 @@ func _ready() -> void:
 
 		collider.add_child(collision_box)
 
-		if i % 30 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
+		if i % 20 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
 			var support_box = MeshInstance3D.new()
 			support_box.mesh = copy_cube.mesh
 			support_box.material_override = copy_cube.material_override

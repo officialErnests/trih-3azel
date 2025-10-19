@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://clq1xjp614hft"]
+[gd_scene load_steps=14 format=4 uid="uid://clq1xjp614hft"]
 
 [ext_resource type="Script" uid="uid://nx7f8e0nem3d" path="res://Scripts/blast_trough.gd" id="1_k0s8m"]
 [ext_resource type="Texture2D" uid="uid://bkgfuwnfmvlqp" path="res://Assets/TRUE_ASSETS/EYES.png" id="2_k0s8m"]
@@ -74,12 +74,13 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_do65e")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_k0s8m"]
+radius = 3.0
+
 [node name="BlastTrough" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_k0s8m")
-continuous_cd = true
-contact_monitor = true
 max_contacts_reported = 4
 script = ExtResource("1_k0s8m")
 
@@ -106,4 +107,11 @@ skeleton = NodePath("")
 
 [node name="Node3D" type="Node3D" parent="."]
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_k0s8m")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
