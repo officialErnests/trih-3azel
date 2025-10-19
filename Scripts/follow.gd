@@ -8,7 +8,7 @@ var avg_pos := Vector3.ZERO
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	avg_pos += (track_object.global_position - avg_pos) * delta * 10
+	avg_pos += (track_object.global_position - avg_pos) * delta * 20
 	match track_object.curent_player_state:
 		track_object.PLAYER_STATES.HIT_TROUGH:
 			fov = 90
@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 			nb_global_position.y += (track_position.y - nb_global_position.y + hit_trough_timer) * delta
 			global_position = nb_global_position
 		_:
-			velocity += (track_object.velocity.length() - velocity) * delta
+			velocity += (track_object.velocity.length() - velocity) * delta * 2
 			fov = min(170, max(75, track_object.velocity.length() + 75 - velocity / 3))
 			var track_position = track_object.global_position + Vector3.UP
 			look_at(avg_pos + Vector3.UP)

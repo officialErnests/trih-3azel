@@ -387,8 +387,9 @@ func _physics_process(delta: float) -> void:
 			rail_positioner.progress = grind_position
 			global_position = rail_positioner.global_position
 			velocity = ze_basis.z * start_speed
-			grinf_eff.rotation = ze_basis.z
-			grinf_eff.scale = Vector3.ONE * start_speed / 200
+			grinf_eff.rotation = rail_positioner.rotation
+			grinf_eff.rotate(grinf_eff.transform.basis.y.normalized(), -PI / 2)
+			grinf_eff.scale = Vector3.ONE * (((start_speed * 20 - 20) / 1000) ** 2)
 			if Input.is_action_just_pressed("Jump"):
 				# Switch states
 				grinf_eff.visible = false
