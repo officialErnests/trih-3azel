@@ -40,7 +40,7 @@ debug_custom_color = Color(1, 0, 0, 1)
 script = ExtResource("1_6scoo")
 
 [node name="Follo_point" type="PathFollow3D" parent="."]
-transform = Transform3D(-0.70870274, -0.6588154, -0.2523665, 0.5221239, -0.24922812, -0.8156529, 0.47446197, -0.70980674, 0.5206298, -5.0032835, 5.560775, 5.110836)
+transform = Transform3D(-0.70870274, -0.65881544, -0.25236624, 0.52212375, -0.24922806, -0.8156525, 0.47446215, -0.7098068, 0.52062935, -5.0032835, 5.560775, 5.110836)
 progress = 24.26816
 rotation_mode = 4
 use_model_front = true
