@@ -4,10 +4,10 @@ extends Path3D
 @export var structure = 1
 @onready var follow_point = $Follo_point
 @onready var visual_boxes = $visual
-@onready var copy_cube = $Cube
 var collider = null
 var path_lenght = 0
 var can_detect = true
+var cube = preload("res://Scenes/plz_be_faster.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,15 +16,11 @@ func _ready() -> void:
 
 	collider = Area3D.new()
 	collider.name = "Rail_collision"
-	add_child(collider)
 
 	for i in range(ceil(path_lenght / segmen_leght)):
 		follow_point.progress = i * segmen_leght + segmen_leght / 2.0
 
-		# var visualiser_box = MeshInstance3D.new()
-		# visualiser_box.mesh = copy_cube.mesh
-		# visualiser_box.material_override = copy_cube.material_override
-		var visualiser_box = copy_cube.duplicate()
+		var visualiser_box = cube.instantiate()
 		visualiser_box.name = "vsBOX_" + str(i)
 		visualiser_box.transform = follow_point.transform
 
@@ -42,20 +38,15 @@ func _ready() -> void:
 		collider.add_child(collision_box)
 
 		if i % 20 == 0 or i == 0 or i == ceil(path_lenght / segmen_leght) - 1:
-			var support_box = MeshInstance3D.new()
-			support_box.mesh = copy_cube.mesh
-			support_box.material_override = copy_cube.material_override
+			var support_box = cube.instantiate()
 			support_box.name = "vsBOX_" + str(i)
 			support_box.transform = follow_point.transform
 			support_box.position -= follow_point.transform.basis.y * 10.25
 			visual_boxes.add_child(support_box)
 			support_box.scale = Vector3(25, 1000, 25)
 			
-			print(ceil((follow_point.position.y + 40) / 20))
 			for e in range(ceil((follow_point.position.y + 40) / 20)):
-				var base_support_box = MeshInstance3D.new()
-				base_support_box.mesh = copy_cube.mesh
-				base_support_box.material_override = copy_cube.material_override
+				var base_support_box = cube.instantiate()
 				base_support_box.name = "vsBOX_" + str(i)
 				base_support_box.transform = follow_point.transform
 				base_support_box.position -= follow_point.transform.basis.y * 20
@@ -64,7 +55,7 @@ func _ready() -> void:
 				visual_boxes.add_child(base_support_box)
 				base_support_box.scale = Vector3(25, 1000, 25)
 
-	copy_cube.queue_free()
+	add_child(collider)
 	collider.body_entered.connect(_on_rail_collision_body_entered)
 
 func debounce():

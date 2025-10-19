@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=48 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
@@ -110,6 +110,27 @@ _data = {
 "tilts": PackedFloat32Array(0.8886345, 1.1526067, 6.2831855, 2.3195426, -1.0862046, -0.9167461, 0.85322374)
 }
 point_count = 7
+
+[sub_resource type="Curve3D" id="Curve3D_7t8sx"]
+_data = {
+"points": PackedVector3Array(-92.55524, -5.419327, -33.149597, 92.55524, 5.419327, 33.149597, 715.0496, 24.065086, 747.5803, 108.6839, 16.188831, -18.139526, -108.6839, -16.188831, 18.139526, 511.31223, 27.128883, 756.5899, -261.483, -53.0503, 41.354004, 261.483, 53.0503, -41.354004, 759.49976, 155.48517, 1147.729, 470.90106, -58.89202, 21.766174, -470.90106, 58.89202, -21.766174, 599.4082, 169.79343, 1030.8235, 45.020782, 13.212326, 2.2774658, -45.020782, -13.212326, -2.2774658, 463.3736, -21.715607, 945.72974, 127.67134, -36.56243, 28.194519, -127.67134, 36.56243, -28.194519, 103.38829, 115.711296, 1011.2117, 59.941437, -15.972359, 79.0285, -59.941437, 15.972359, -79.0285, -124.0865, 77.077354, 998.2532, 37.342224, 24.866394, 106.58057, -37.342224, -24.866394, -106.58057, -211.4332, 211.78323, 765.57874),
+"tilts": PackedFloat32Array(0.7113454, -0.8524531, -2.5961838, -1.6984332, -2.1977863, 0.68553835, -3.0262337, -0.007257693)
+}
+point_count = 8
+
+[sub_resource type="Curve3D" id="Curve3D_mg4q0"]
+_data = {
+"points": PackedVector3Array(9.444061, -5.2557564, -47.922913, -9.444061, 5.2557564, 47.922913, 355.2095, 52.83611, -491.76627, -82.47446, -13.402859, -73.75865, 82.47446, 13.402859, 73.75865, 339.4371, 35.56868, -215.69386, -30.384155, 3.3194656, 104.91864, 30.384155, -3.3194656, -104.91864, 622.07056, 103.93187, -478.0595, -6.9399414, -29.467468, -29.800385, 6.9399414, 29.467468, 29.800385, 677.7102, 162.2139, -317.58237),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Curve3D" id="Curve3D_vm72l"]
+_data = {
+"points": PackedVector3Array(-143.38562, -3.2273817, 39.79068, 143.38562, 3.2273817, -39.79068, 171.60057, 19.522795, 233.11884, -111.55939, -85.9536, -70.271866, 111.55939, 85.9536, 70.271866, 651.67035, 290.00934, 122.63014, -17.562866, 150.33344, -83.44742, 17.562866, -150.33344, 83.44742, 897.41003, 365.38583, 180.84833, 114.07324, -159.25937, 21.297302, -114.07324, 159.25937, -21.297302, 934.92285, 535.28064, 654.573, 43.69049, -137.13837, 11.919312, -43.69049, 137.13837, -11.919312, 791.9934, 744.5066, 527.75793),
+"tilts": PackedFloat32Array(0, -6.2831855, 6.2831855, 0, 0)
+}
+point_count = 5
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o5yvi"]
 atlas = ExtResource("8_ldgsr")
@@ -274,10 +295,10 @@ TRICK_SLOW_DOWN = 0.1
 HIT_TROUGH_TIME = 1.0
 HIT_TROUGH_CLONES = 10
 HIT_TROUGH_DEBRIS_TIMER = 10
-GRINDING_MIN_SPEED = 10
+GRINDING_MIN_SPEED = 30
 GRINDING_ADDER = 10
 FAST_AIR_SLOW_DOWN = 0.1
-FAST_AIR_GRAVITY = 20.0
+FAST_AIR_GRAVITY = 10.0
 
 [node name="WORD_GEN" parent="." instance=ExtResource("2_qxrlw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 575.9912, 196.60815, 427.7413)
@@ -337,6 +358,24 @@ script = ExtResource("3_3dryh")
 [node name="Mountain_2" type="Path3D" parent="RAILS"]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 curve = SubResource("Curve3D_exi56")
+debug_custom_color = Color(1, 1, 0, 1)
+script = ExtResource("3_3dryh")
+
+[node name="Mountain_3" type="Path3D" parent="RAILS"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+curve = SubResource("Curve3D_7t8sx")
+debug_custom_color = Color(1, 1, 0, 1)
+script = ExtResource("3_3dryh")
+
+[node name="Mountain_4" type="Path3D" parent="RAILS"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+curve = SubResource("Curve3D_mg4q0")
+debug_custom_color = Color(1, 1, 0, 1)
+script = ExtResource("3_3dryh")
+
+[node name="Mountain_5" type="Path3D" parent="RAILS"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+curve = SubResource("Curve3D_vm72l")
 debug_custom_color = Color(1, 1, 0, 1)
 script = ExtResource("3_3dryh")
 
@@ -426,6 +465,6 @@ spawn_size = Vector3(2200, 1000, 2400)
 spawn_obj = ExtResource("6_i6g32")
 spawn_size_min = 1.0
 spawn_size_max = 1.0
-spawn_amount = 1000
+spawn_amount = 100
 
 [editable path="Rabbit"]

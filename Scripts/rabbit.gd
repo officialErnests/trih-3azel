@@ -430,7 +430,7 @@ func _physics_process(delta: float) -> void:
 					add_velocity(delta, direction, START_MOVE_SPEED_BOOST_MUL * prev_velocity + START_MOVE_SPEED_BOOST_ADD)
 				curent_player_state = PLAYER_STATES.JUMP_START
 			
-			velocity.y -= JUMP_START_GRAVITY * delta
+			velocity.y -= FAST_AIR_GRAVITY * delta
 			if is_on_floor():
 				curent_player_state = PLAYER_STATES.START_MOVE
 			blastTroughDetect()
