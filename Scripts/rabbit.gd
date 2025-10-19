@@ -21,6 +21,7 @@ enum PLAYER_STATES {
 @export_category("Others")
 @export var movement_direction_node: Node3D = Node3D.new()
 
+
 #SETUP
 @export_category("Movement")
 #-STILL

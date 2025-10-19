@@ -1,11 +1,17 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnus5g7rwsm71"]
+[gd_scene load_steps=26 format=3 uid="uid://dnus5g7rwsm71"]
 
 [ext_resource type="PackedScene" uid="uid://ca3vfexx3chtr" path="res://Scenes/Rabbit.tscn" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b810pw1blmn73" path="res://Scenes/word_gen.tscn" id="2_qxrlw"]
 [ext_resource type="Script" uid="uid://7j4jtxrpw5fk" path="res://Scripts/pathToRail.gd" id="3_3dryh"]
 [ext_resource type="Script" uid="uid://dpwqhsut0wvj8" path="res://Scripts/follow.gd" id="3_wrm1d"]
+[ext_resource type="Script" uid="uid://bt3mkrrxa7rvl" path="res://Scripts/close_tutorial.gd" id="5_h4fw4"]
 [ext_resource type="Script" uid="uid://cg5axuaqisu8" path="res://Scripts/object_generator.gd" id="5_wowpa"]
 [ext_resource type="PackedScene" uid="uid://clq1xjp614hft" path="res://Scenes/blast_trough.tscn" id="6_i6g32"]
+[ext_resource type="Texture2D" uid="uid://cd3msi5es7rnh" path="res://Assets/TRUE_ASSETS/TEXT_SHADOW.png" id="7_v158k"]
+[ext_resource type="Texture2D" uid="uid://hb8o12kdbopv" path="res://Assets/TRUE_ASSETS/TEXT.png" id="8_h4fw4"]
+[ext_resource type="Texture2D" uid="uid://bpw5vi2d5ldux" path="res://Assets/TRUE_ASSETS/FRAMES.png" id="8_ldgsr"]
+[ext_resource type="Texture2D" uid="uid://b2g87q6hjqhbl" path="res://Assets/TRUE_ASSETS/BUNNY_PIC.png" id="8_o5yvi"]
+[ext_resource type="Script" uid="uid://dhu0nc830pmuc" path="res://Scripts/start_animation.gd" id="9_rku1e"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebmjs"]
 sky_top_color = Color(0.5372549, 0.60784316, 0.9137255, 1)
@@ -41,10 +47,75 @@ adjustment_saturation = 8.0
 
 [sub_resource type="Curve3D" id="Curve3D_qxrlw"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 8.382, 2.102, 0.139, -9.980448, -3.6955342, 5.346283, 9.980448, 3.6955342, -5.346283, 32.325653, 6.2857985, -2.323368, 0.042816162, -4.074606, 2.5858688, -0.042816162, 4.074606, -2.5858688, 41.353054, 23.376596, -16.969051, 13.472603, -5.3182106, -0.86678314, -13.472603, 5.3182106, 0.86678314, 33.00533, 50.0379, -33.298443, -1.7559319, 24.933525, -27.14502, 1.7559319, -24.933525, 27.14502, -2.8330493, 14.441103, -18.287281, -22.981201, -3.8157768, 4.886158, 22.981201, 3.8157768, -4.886158, 41.928444, 34.713795, 36.29403, -5.48452, 15.736164, 20.516247, 5.48452, -15.736164, -20.516247, 22.73962, 19.606243, -14.309261, 17.045815, 1.9749422, 21.48943, -17.045815, -1.9749422, -21.48943, 93.77485, 40.93724, -82.72391, 14.219254, -27.564903, 29.73471, -14.219254, 27.564903, -29.73471, 30.867, 69.164, -113.226),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 8.382, 2.102, 0.139, -9.980448, -3.6955342, 5.346283, 9.980448, 3.6955342, -5.346283, 32.325653, 6.2857985, -2.323368, 0.042816162, -4.074606, 2.5858688, -0.042816162, 4.074606, -2.5858688, 41.353054, 23.376596, -16.969051, 13.472603, -5.3182106, -0.86678314, -13.472603, 5.3182106, 0.86678314, 33.00533, 50.0379, -33.298443, -1.7559319, 24.933525, -27.14502, 1.7559319, -24.933525, 27.14502, -2.8330493, 14.441103, -18.287281, -22.981201, -3.8157768, 4.886158, 22.981201, 3.8157768, -4.886158, 41.928444, 34.713795, 36.29403, -5.48452, 15.736164, 20.516247, 5.48452, -15.736164, -20.516247, 22.73962, 19.606243, -14.309261, 17.045815, 1.9749422, 21.48943, -17.045815, -1.9749422, -21.48943, 93.77485, 40.93724, -82.72391, 16.81181, -24.580723, -18.470474, -16.81181, 24.580723, 18.470474, 30.867, 69.164, -113.226),
 "tilts": PackedFloat32Array(0.5061455, -0.28910136, -0.34568024, -0.74496263, 0.1468514, -0.9859015, 2.893865, 1.3389672, 0.8848819)
 }
 point_count = 9
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5yvi"]
+atlas = ExtResource("8_ldgsr")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rku1e"]
+atlas = ExtResource("8_ldgsr")
+region = Rect2(96, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfjv2"]
+atlas = ExtResource("8_ldgsr")
+region = Rect2(192, 0, 96, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1phco"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o5yvi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rku1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rfjv2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1phco"]
+atlas = ExtResource("8_o5yvi")
+region = Rect2(96, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nb51f"]
+atlas = ExtResource("8_o5yvi")
+region = Rect2(0, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnt18"]
+atlas = ExtResource("8_o5yvi")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ewbju"]
+atlas = ExtResource("8_o5yvi")
+region = Rect2(96, 96, 96, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_85qyi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1phco")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nb51f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnt18")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ewbju")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Game" type="Node3D"]
 
@@ -105,6 +176,56 @@ current = true
 script = ExtResource("3_wrm1d")
 stalk_distance = 3
 track_object = NodePath("../Rabbit")
+
+[node name="GUI" type="CanvasLayer" parent="Camera3D"]
+layer = 2
+script = ExtResource("5_h4fw4")
+
+[node name="TextShadow" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 67)
+texture = ExtResource("7_v158k")
+
+[node name="TextShadow2" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 64)
+texture = ExtResource("7_v158k")
+
+[node name="TextShadow3" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 58)
+texture = ExtResource("7_v158k")
+
+[node name="TextShadow4" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 53)
+texture = ExtResource("7_v158k")
+
+[node name="TextShadow5" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 46)
+texture = ExtResource("7_v158k")
+
+[node name="TextShadow6" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 38)
+texture = ExtResource("7_v158k")
+
+[node name="Text" type="Sprite2D" parent="Camera3D/GUI"]
+position = Vector2(64, 48)
+scale = Vector2(0.21, 0.21)
+texture = ExtResource("8_h4fw4")
+
+[node name="Rabbit_face" type="CanvasLayer" parent="Camera3D"]
+
+[node name="Holder" type="Node2D" parent="Camera3D/Rabbit_face"]
+position = Vector2(16, 80)
+scale = Vector2(0.25, 0.25)
+
+[node name="Frame" type="AnimatedSprite2D" parent="Camera3D/Rabbit_face/Holder"]
+sprite_frames = SubResource("SpriteFrames_1phco")
+frame_progress = 0.9048364
+script = ExtResource("9_rku1e")
+
+[node name="faces" type="AnimatedSprite2D" parent="Camera3D/Rabbit_face/Holder"]
+rotation = -0.3822271
+scale = Vector2(0.8, 0.8)
+sprite_frames = SubResource("SpriteFrames_85qyi")
+frame = 1
 
 [node name="RandomPowers" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 577.00446, 577.71924, 406.06754)
